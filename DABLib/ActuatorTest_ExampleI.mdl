@@ -1,0 +1,443 @@
+Model {
+  Name			  "ActuatorTest_ExampleI"
+  Version		  2.20
+  SimParamPage		  Solver
+  SampleTimeColors	  off
+  InvariantConstants	  off
+  WideVectorLines	  on
+  ShowLineWidths	  off
+  StartTime		  "0.0"
+  StopTime		  "50"
+  Solver		  ode4
+  RelTol		  "1e-3"
+  AbsTol		  "1e-6"
+  Refine		  "1"
+  MaxStep		  "auto"
+  InitialStep		  "auto"
+  FixedStep		  "0.0025"
+  MaxOrder		  5
+  OutputOption		  RefineOutputTimes
+  OutputTimes		  "[]"
+  LoadExternalInput	  off
+  ExternalInput		  "[t, u]"
+  SaveTime		  on
+  TimeSaveName		  "tout"
+  SaveState		  off
+  StateSaveName		  "xout"
+  SaveOutput		  on
+  OutputSaveName	  "yout"
+  LoadInitialState	  off
+  InitialState		  "xInitial"
+  SaveFinalState	  off
+  FinalStateName	  "xFinal"
+  LimitMaxRows		  off
+  MaxRows		  "1000"
+  Decimation		  "1"
+  AlgebraicLoopMsg	  warning
+  MinStepSizeMsg	  warning
+  UnconnectedInputMsg	  warning
+  UnconnectedOutputMsg	  warning
+  UnconnectedLineMsg	  warning
+  ConsistencyChecking	  off
+  ZeroCross		  on
+  SimulationMode	  normal
+  RTWSystemTargetFile	  "grt.tlc"
+  RTWInlineParameters	  off
+  RTWPlaceOutputsASAP	  off
+  RTWRetainRTWFile	  off
+  RTWTemplateMakefile	  "grt_default_tmf"
+  RTWMakeCommand	  "make_rtw"
+  RTWGenerateCodeOnly	  off
+  ExtModeMexFile	  "ext_comm"
+  ExtModeBatchMode	  off
+  BlockDefaults {
+    Orientation		    right
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    NamePlacement	    normal
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    center
+    VerticalAlignment	    middle
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  System {
+    Name		    "ActuatorTest_ExampleI"
+    Location		    [431, 94, 1201, 505]
+    Open		    on
+    ToolBar		    on
+    StatusBar		    on
+    ScreenColor		    white
+    PaperOrientation	    landscape
+    PaperPositionMode	    auto
+    PaperType		    usletter
+    PaperUnits		    inches
+    Block {
+      BlockType		      Reference
+      Name		      "Act"
+      Ports		      [5, 6, 0, 0, 0]
+      Position		      [215, 107, 355, 308]
+      DropShadow	      on
+      NamePlacement	      alternate
+      SourceBlock	      "DABLib/Act"
+      SourceType	      "Actuator"
+      Dist		      off
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "CV generator"
+      Ports		      [0, 1, 0, 0, 0]
+      Position		      [90, 120, 135, 140]
+      NamePlacement	      alternate
+      ShowPortLabels	      on
+      System {
+	Name			"CV generator"
+	Location		[242, 228, 422, 399]
+	Open			off
+	ToolBar			off
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  Step
+	  Name			  "Step"
+	  Position		  [25, 25, 55, 55]
+	  BackgroundColor	  yellow
+	  ShowName		  off
+	  Time			  "0"
+	  Before		  "0"
+	  After			  "0.5"
+	}
+	Block {
+	  BlockType		  Step
+	  Name			  "Step1"
+	  Position		  [25, 110, 55, 140]
+	  BackgroundColor	  yellow
+	  ShowName		  off
+	  Time			  "25"
+	  Before		  "0"
+	  After			  "0.5"
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "Sum"
+	  Ports			  [3, 1, 0, 0, 0]
+	  Position		  [80, 62, 100, 98]
+	  ShowName		  off
+	  Inputs		  "+++"
+	}
+	Block {
+	  BlockType		  Constant
+	  Name			  "T1"
+	  Position		  [25, 65, 55, 95]
+	  BackgroundColor	  yellow
+	  ShowName		  off
+	  Value			  "0.0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "CV[0-1]"
+	  Position		  [125, 73, 155, 87]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Line {
+	  SrcBlock		  "Step"
+	  SrcPort		  1
+	  Points		  [5, 0]
+	  DstBlock		  "Sum"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "T1"
+	  SrcPort		  1
+	  DstBlock		  "Sum"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Step1"
+	  SrcPort		  1
+	  Points		  [5, 0]
+	  DstBlock		  "Sum"
+	  DstPort		  3
+	}
+	Line {
+	  SrcBlock		  "Sum"
+	  SrcPort		  1
+	  DstBlock		  "CV[0-1]"
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "CV, X', (P1'-P2'), F', Control Error\nPlot"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [660, 180, 690, 210]
+      Floating		      off
+      Location		      [579, 551, 1091, 885]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      xonly
+      TimeRange		      "auto"
+      YMin		      "0"
+      YMax		      "1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "FGen"
+      Ports		      [0, 1, 0, 0, 0]
+      Position		      [15, 312, 50, 338]
+      ShowName		      off
+      SourceBlock	      "DABLib/FGen"
+      SourceType	      "Fault generator"
+      From		      "15"
+      To		      "inf"
+      MFS		      "1"
+      FDT		      "0"
+      FSD		      "1"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "FSel"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [85, 297, 160, 353]
+      SourceBlock	      "DABLib/FSel"
+      SourceType	      "Fault vector element attribution"
+      FSel		      "f2 - Valve plug or valve seat sedimentation"
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux1"
+      Ports		      [5, 1, 0, 0, 0]
+      Position		      [570, 113, 580, 277]
+      BackgroundColor	      black
+      ShowName		      off
+      Inputs		      "5"
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "P1[Pa] "
+      Position		      [80, 161, 150, 179]
+      BackgroundColor	      yellow
+      NamePlacement	      alternate
+      Value		      "3500000"
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "P2[Pa] "
+      Position		      [80, 201, 150, 219]
+      BackgroundColor	      yellow
+      Value		      "2600000"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum1"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [480, 239, 505, 266]
+      ShowName		      off
+      Inputs		      "+-"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum2"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [395, 159, 410, 186]
+      ShowName		      off
+      Inputs		      "+-"
+    }
+    Block {
+      BlockType		      Terminator
+      Name		      "Terminator"
+      Position		      [395, 110, 415, 130]
+      ShowName		      off
+    }
+    Block {
+      BlockType		      Terminator
+      Name		      "Terminator1"
+      Position		      [395, 215, 415, 235]
+      ShowName		      off
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "Water temperature\n[C]"
+      Position		      [95, 241, 135, 259]
+      BackgroundColor	      yellow
+      Value		      "20"
+    }
+    Line {
+      SrcBlock		      "Mux1"
+      SrcPort		      1
+      DstBlock		      "CV, X', (P1'-P2'), F', Control Error\nPlot"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "FGen"
+      SrcPort		      1
+      DstBlock		      "FSel"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Sum2"
+      SrcPort		      1
+      Points		      [140, 0]
+      DstBlock		      "Mux1"
+      DstPort		      3
+    }
+    Line {
+      SrcBlock		      "CV generator"
+      SrcPort		      1
+      Points		      [35, 0]
+      Branch {
+	Points			[0, -65; 285, 0]
+	Branch {
+	  Points		  [0, 180]
+	  DstBlock		  "Sum1"
+	  DstPort		  1
+	}
+	Branch {
+	  Points		  [95, 0]
+	  DstBlock		  "Mux1"
+	  DstPort		  1
+	}
+      }
+      Branch {
+	DstBlock		"Act"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "P1[Pa] "
+      SrcPort		      1
+      DstBlock		      "Act"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "P2[Pa] "
+      SrcPort		      1
+      DstBlock		      "Act"
+      DstPort		      3
+    }
+    Line {
+      SrcBlock		      "Water temperature\n[C]"
+      SrcPort		      1
+      DstBlock		      "Act"
+      DstPort		      4
+    }
+    Line {
+      SrcBlock		      "Act"
+      SrcPort		      2
+      Points		      [20, 0]
+      DstBlock		      "Sum2"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Act"
+      SrcPort		      3
+      Points		      [20, 0]
+      DstBlock		      "Sum2"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Act"
+      SrcPort		      4
+      DstBlock		      "Terminator1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Act"
+      SrcPort		      6
+      Points		      [195, 0]
+      DstBlock		      "Mux1"
+      DstPort		      4
+    }
+    Line {
+      SrcBlock		      "Act"
+      SrcPort		      5
+      Points		      [90, 0]
+      Branch {
+	DstBlock		"Sum1"
+	DstPort			2
+      }
+      Branch {
+	Points			[0, -95]
+	DstBlock		"Mux1"
+	DstPort			2
+      }
+    }
+    Line {
+      SrcBlock		      "Act"
+      SrcPort		      1
+      DstBlock		      "Terminator"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Sum1"
+      SrcPort		      1
+      DstBlock		      "Mux1"
+      DstPort		      5
+    }
+    Line {
+      SrcBlock		      "FSel"
+      SrcPort		      1
+      Points		      [35, 0]
+      DstBlock		      "Act"
+      DstPort		      5
+    }
+    Annotation {
+      Position		      [354, 42]
+      ForegroundColor	      red
+      Text		      "Test of 'Act' actuator block"
+      FontName		      "Arial"
+      FontSize		      16
+      FontAngle		      italic
+    }
+    Annotation {
+      Position		      [239, 12]
+      ForegroundColor	      blue
+      Text		      "Example I - application of DABLib components"
+      FontName		      "Arial"
+      FontSize		      20
+      FontAngle		      italic
+    }
+    Annotation {
+      Position		      [519, 342]
+      ForegroundColor	      gray
+      Text		      "The example of f2 abrupt fault simulation. \nIn"
+" 15 second a stone get stuck in the valve seat. \nOne can see immediate flow "
+"decrease.\n Full valve closing become not possible."
+      FontName		      "Arial"
+      FontAngle		      italic
+    }
+  }
+}

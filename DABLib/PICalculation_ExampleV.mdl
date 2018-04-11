@@ -1,0 +1,2648 @@
+Model {
+  Name			  "PICalculation_ExampleV"
+  Version		  2.20
+  SimParamPage		  Solver
+  SampleTimeColors	  off
+  InvariantConstants	  off
+  WideVectorLines	  off
+  ShowLineWidths	  off
+  StartTime		  "0.0"
+  StopTime		  "100"
+  Solver		  ode4
+  RelTol		  "1e-3"
+  AbsTol		  "1e-6"
+  Refine		  "1"
+  MaxStep		  "auto"
+  InitialStep		  "auto"
+  FixedStep		  "0.1"
+  MaxOrder		  5
+  OutputOption		  RefineOutputTimes
+  OutputTimes		  "[]"
+  LoadExternalInput	  off
+  ExternalInput		  "[t, u]"
+  SaveTime		  on
+  TimeSaveName		  "tout"
+  SaveState		  off
+  StateSaveName		  "xout"
+  SaveOutput		  on
+  OutputSaveName	  "yout"
+  LoadInitialState	  off
+  InitialState		  "xInitial"
+  SaveFinalState	  off
+  FinalStateName	  "xFinal"
+  LimitMaxRows		  off
+  MaxRows		  "1000"
+  Decimation		  "1"
+  AlgebraicLoopMsg	  warning
+  MinStepSizeMsg	  warning
+  UnconnectedInputMsg	  warning
+  UnconnectedOutputMsg	  warning
+  UnconnectedLineMsg	  warning
+  ConsistencyChecking	  off
+  ZeroCross		  on
+  SimulationMode	  normal
+  RTWSystemTargetFile	  "grt.tlc"
+  RTWInlineParameters	  off
+  RTWPlaceOutputsASAP	  off
+  RTWRetainRTWFile	  off
+  RTWTemplateMakefile	  "grt_default_tmf"
+  RTWMakeCommand	  "make_rtw"
+  RTWGenerateCodeOnly	  off
+  ExtModeMexFile	  "ext_comm"
+  ExtModeBatchMode	  off
+  BlockDefaults {
+    Orientation		    right
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    NamePlacement	    normal
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    center
+    VerticalAlignment	    middle
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  System {
+    Name		    "PICalculation_ExampleV"
+    Location		    [680, 74, 1276, 676]
+    Open		    on
+    ToolBar		    on
+    StatusBar		    on
+    ScreenColor		    white
+    PaperOrientation	    landscape
+    PaperPositionMode	    auto
+    PaperType		    usletter
+    PaperUnits		    inches
+    Block {
+      BlockType		      Scope
+      Name		      "CID"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [170, 205, 200, 215]
+      Floating		      off
+      Location		      [341, 195, 668, 345]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "auto"
+      YMin		      "0"
+      YMax		      "5"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "DD"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [175, 125, 205, 135]
+      Floating		      off
+      Location		      [6, 312, 333, 527]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "100"
+      YMin		      "0"
+      YMax		      "1.1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Display
+      Name		      "Display"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [455, 87, 535, 333]
+      ShowName		      off
+      Format		      short
+      Decimation	      "1"
+      Floating		      off
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Exemplary FDI Decision"
+      Ports		      [0, 5, 0, 0, 0]
+      Position		      [85, 135, 130, 325]
+      ShowPortLabels	      on
+      System {
+	Name			"Exemplary FDI Decision"
+	Location		[395, 389, 866, 824]
+	Open			off
+	ToolBar			off
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "<>DGN0"
+	  Ports			  [0, 1, 0, 0, 0]
+	  Position		  [230, 12, 265, 38]
+	  BackgroundColor	  red
+	  NamePlacement		  alternate
+	  ShowPortLabels	  on
+	  MaskType		  "Fault generator"
+	  MaskDescription	  "Used for generation of abrupt and incipient"
+" standarised fault strength values.\n\nParameters: \nFrom - fault start time "
+"[s]\nTo - fault decay time [s] \nMax Fault Strength - maximum fault strength "
+"value that will be reached during simulation [standarised range - 0 1]\nFault"
+" Development Time - after this time Max Fault Strength will be reached [s]\nD"
+"irection - defines the sign of fault strength."
+	  MaskHelp		  "web( [ 'file:///' which('DABLib.pdf')]);"
+	  MaskPromptString	  "From:|To:|Max Fault Strength:|Fault Develop"
+"ment Time:|Direction:"
+	  MaskStyleString	  "edit,edit,edit,edit,edit"
+	  MaskTunableValueString  "on,on,on,on,on"
+	  MaskVariables		  "From=@1;To=@2;MFS=@3;FDT=@4;FSD=@5;"
+	  MaskInitialization	  "if FDT==0\n FDS = 9999999999999999999999999"
+"9;\nelse\n FDS = MFS / FDT;\nend\nif To==inf\n To = 9999999999999999999999999"
+"9;\nend\nif FSD >= 0\nFSD=1;\nelse\nFSD=-1;\nend"
+	  MaskDisplay		  "disp('FGen') "
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  port
+	  MaskIconUnits		  normalized
+	  MaskValueString	  "50|80|1|0|1"
+	  System {
+	    Name		    "<>DGN0"
+	    Location		    [343, 416, 705, 665]
+	    Open		    off
+	    ToolBar		    off
+	    StatusBar		    off
+	    ScreenColor		    white
+	    PaperOrientation	    landscape
+	    PaperPositionMode	    auto
+	    PaperType		    usletter
+	    PaperUnits		    inches
+	    Block {
+	      BlockType		      Constant
+	      Name		      "Constant5"
+	      Position		      [145, 177, 175, 203]
+	      ShowName		      off
+	      Value		      "FSD"
+	    }
+	    Block {
+	      BlockType		      Product
+	      Name		      "Product1"
+	      Ports		      [3, 1, 0, 0, 0]
+	      Position		      [205, 73, 235, 107]
+	      ShowName		      off
+	      Inputs		      "3"
+	    }
+	    Block {
+	      BlockType		      SubSystem
+	      Name		      "Ramp"
+	      Ports		      [0, 1, 0, 0, 0]
+	      Position		      [45, 65, 75, 95]
+	      ShowPortLabels	      on
+	      MaskType		      "Ramp"
+	      MaskDescription	      "ramp"
+	      MaskPromptString	      "Slope:|Start time:|Initial output:"
+	      MaskStyleString	      "edit,edit,edit"
+	      MaskTunableValueString  "on,on,on"
+	      MaskVariables	      "slope=@1;start=@2;X0=@3;"
+	      MaskDisplay	      "plot([0:10],[1,1,1,1:8])"
+	      MaskIconFrame	      on
+	      MaskIconOpaque	      on
+	      MaskIconRotate	      none
+	      MaskIconUnits	      autoscale
+	      MaskValueString	      "FDS|From|0"
+	      System {
+		Name			"Ramp"
+		Location		[490, 319, 924, 523]
+		Open			off
+		ToolBar			off
+		StatusBar		off
+		ScreenColor		white
+		PaperOrientation	landscape
+		PaperPositionMode	auto
+		PaperType		usletter
+		PaperUnits		inches
+		Block {
+		  BlockType		  Clock
+		  Name			  "Clock"
+		  Position		  [75, 75, 95, 95]
+		  Location		  [30, 40, 110, 80]
+		}
+		Block {
+		  BlockType		  Constant
+		  Name			  "Constant"
+		  Position		  [30, 104, 65, 126]
+		  Value			  "start"
+		}
+		Block {
+		  BlockType		  Constant
+		  Name			  "Constant1"
+		  Position		  [175, 149, 210, 171]
+		  Value			  "X0"
+		}
+		Block {
+		  BlockType		  Product
+		  Name			  "Product"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [225, 83, 255, 107]
+		  Inputs		  "2"
+		}
+		Block {
+		  BlockType		  Step
+		  Name			  "Step"
+		  Position		  [175, 27, 205, 53]
+		  Time			  "start"
+		  Before		  "0"
+		  After			  "slope"
+		}
+		Block {
+		  BlockType		  Sum
+		  Name			  "Sum"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [135, 69, 165, 131]
+		  Inputs		  "+-"
+		}
+		Block {
+		  BlockType		  Sum
+		  Name			  "Sum1"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [300, 79, 330, 141]
+		  Inputs		  "++"
+		}
+		Block {
+		  BlockType		  Outport
+		  Name			  "out1"
+		  Position		  [370, 103, 400, 117]
+		  Port			  "1"
+		  OutputWhenDisabled	  held
+		  InitialOutput		  "[]"
+		}
+		Line {
+		  SrcBlock		  "Sum"
+		  SrcPort		  1
+		  DstBlock		  "Product"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Constant"
+		  SrcPort		  1
+		  DstBlock		  "Sum"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Clock"
+		  SrcPort		  1
+		  DstBlock		  "Sum"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Step"
+		  SrcPort		  1
+		  DstBlock		  "Product"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Product"
+		  SrcPort		  1
+		  DstBlock		  "Sum1"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Constant1"
+		  SrcPort		  1
+		  Points		  [50, 0; 0, -35]
+		  DstBlock		  "Sum1"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Sum1"
+		  SrcPort		  1
+		  DstBlock		  "out1"
+		  DstPort		  1
+		}
+	      }
+	    }
+	    Block {
+	      BlockType		      Saturate
+	      Name		      "Saturation8"
+	      Position		      [95, 70, 115, 90]
+	      ShowName		      off
+	      UpperLimit	      "MFS"
+	      LowerLimit	      "0"
+	    }
+	    Block {
+	      BlockType		      Step
+	      Name		      "Step"
+	      Position		      [50, 135, 80, 165]
+	      Time		      "To"
+	      Before		      "1"
+	      After		      "0"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "y"
+	      Position		      [305, 83, 335, 97]
+	      Port		      "1"
+	      OutputWhenDisabled      held
+	      InitialOutput	      "0"
+	    }
+	    Line {
+	      SrcBlock		      "Ramp"
+	      SrcPort		      1
+	      DstBlock		      "Saturation8"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Saturation8"
+	      SrcPort		      1
+	      DstBlock		      "Product1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Step"
+	      SrcPort		      1
+	      Points		      [45, 0; 0, -60]
+	      DstBlock		      "Product1"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Product1"
+	      SrcPort		      1
+	      DstBlock		      "y"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Constant5"
+	      SrcPort		      1
+	      Points		      [10, 0]
+	      DstBlock		      "Product1"
+	      DstPort		      3
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  Logic
+	  Name			  "BZ-Fault Free 2"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [225, 152, 255, 168]
+	  ShowName		  off
+	  Operator		  NOT
+	  Inputs		  "1"
+	}
+	Block {
+	  BlockType		  Logic
+	  Name			  "BZ-Fault Free 3"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [225, 167, 255, 183]
+	  ShowName		  off
+	  Operator		  NOT
+	  Inputs		  "1"
+	}
+	Block {
+	  BlockType		  Logic
+	  Name			  "DGN0"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [270, 151, 300, 184]
+	  Operator		  AND
+	  Inputs		  "2"
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "DGN1"
+	  Ports			  [0, 1, 0, 0, 0]
+	  Position		  [30, 117, 65, 143]
+	  BackgroundColor	  red
+	  NamePlacement		  alternate
+	  ShowPortLabels	  on
+	  MaskType		  "Fault generator"
+	  MaskDescription	  "Used for generation of abrupt and incipient"
+" standarised fault strength values.\n\nParameters: \nFrom - fault start time "
+"[s]\nTo - fault decay time [s] \nMax Fault Strength - maximum fault strength "
+"value that will be reached during simulation [standarised range - 0 1]\nFault"
+" Development Time - after this time Max Fault Strength will be reached [s]\nD"
+"irection - defines the sign of fault strength."
+	  MaskHelp		  "web( [ 'file:///' which('DABLib.pdf')]);"
+	  MaskPromptString	  "From:|To:|Max Fault Strength:|Fault Develop"
+"ment Time:|Direction:"
+	  MaskStyleString	  "edit,edit,edit,edit,edit"
+	  MaskTunableValueString  "on,on,on,on,on"
+	  MaskVariables		  "From=@1;To=@2;MFS=@3;FDT=@4;FSD=@5;"
+	  MaskInitialization	  "if FDT==0\n FDS = 9999999999999999999999999"
+"9;\nelse\n FDS = MFS / FDT;\nend\nif To==inf\n To = 9999999999999999999999999"
+"9;\nend\nif FSD >= 0\nFSD=1;\nelse\nFSD=-1;\nend"
+	  MaskDisplay		  "disp('FGen') "
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  port
+	  MaskIconUnits		  normalized
+	  MaskValueString	  "25|35|1|0|1"
+	  System {
+	    Name		    "DGN1"
+	    Location		    [343, 416, 705, 665]
+	    Open		    off
+	    ToolBar		    off
+	    StatusBar		    off
+	    ScreenColor		    white
+	    PaperOrientation	    landscape
+	    PaperPositionMode	    auto
+	    PaperType		    usletter
+	    PaperUnits		    inches
+	    Block {
+	      BlockType		      Constant
+	      Name		      "Constant5"
+	      Position		      [145, 177, 175, 203]
+	      ShowName		      off
+	      Value		      "FSD"
+	    }
+	    Block {
+	      BlockType		      Product
+	      Name		      "Product1"
+	      Ports		      [3, 1, 0, 0, 0]
+	      Position		      [205, 73, 235, 107]
+	      ShowName		      off
+	      Inputs		      "3"
+	    }
+	    Block {
+	      BlockType		      SubSystem
+	      Name		      "Ramp"
+	      Ports		      [0, 1, 0, 0, 0]
+	      Position		      [45, 65, 75, 95]
+	      ShowPortLabels	      on
+	      MaskType		      "Ramp"
+	      MaskDescription	      "ramp"
+	      MaskPromptString	      "Slope:|Start time:|Initial output:"
+	      MaskStyleString	      "edit,edit,edit"
+	      MaskTunableValueString  "on,on,on"
+	      MaskVariables	      "slope=@1;start=@2;X0=@3;"
+	      MaskDisplay	      "plot([0:10],[1,1,1,1:8])"
+	      MaskIconFrame	      on
+	      MaskIconOpaque	      on
+	      MaskIconRotate	      none
+	      MaskIconUnits	      autoscale
+	      MaskValueString	      "FDS|From|0"
+	      System {
+		Name			"Ramp"
+		Location		[490, 319, 924, 523]
+		Open			off
+		ToolBar			off
+		StatusBar		off
+		ScreenColor		white
+		PaperOrientation	landscape
+		PaperPositionMode	auto
+		PaperType		usletter
+		PaperUnits		inches
+		Block {
+		  BlockType		  Clock
+		  Name			  "Clock"
+		  Position		  [75, 75, 95, 95]
+		  Location		  [30, 40, 110, 80]
+		}
+		Block {
+		  BlockType		  Constant
+		  Name			  "Constant"
+		  Position		  [30, 104, 65, 126]
+		  Value			  "start"
+		}
+		Block {
+		  BlockType		  Constant
+		  Name			  "Constant1"
+		  Position		  [175, 149, 210, 171]
+		  Value			  "X0"
+		}
+		Block {
+		  BlockType		  Product
+		  Name			  "Product"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [225, 83, 255, 107]
+		  Inputs		  "2"
+		}
+		Block {
+		  BlockType		  Step
+		  Name			  "Step"
+		  Position		  [175, 27, 205, 53]
+		  Time			  "start"
+		  Before		  "0"
+		  After			  "slope"
+		}
+		Block {
+		  BlockType		  Sum
+		  Name			  "Sum"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [135, 69, 165, 131]
+		  Inputs		  "+-"
+		}
+		Block {
+		  BlockType		  Sum
+		  Name			  "Sum1"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [300, 79, 330, 141]
+		  Inputs		  "++"
+		}
+		Block {
+		  BlockType		  Outport
+		  Name			  "out1"
+		  Position		  [370, 103, 400, 117]
+		  Port			  "1"
+		  OutputWhenDisabled	  held
+		  InitialOutput		  "[]"
+		}
+		Line {
+		  SrcBlock		  "Sum"
+		  SrcPort		  1
+		  DstBlock		  "Product"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Constant"
+		  SrcPort		  1
+		  DstBlock		  "Sum"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Clock"
+		  SrcPort		  1
+		  DstBlock		  "Sum"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Step"
+		  SrcPort		  1
+		  DstBlock		  "Product"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Product"
+		  SrcPort		  1
+		  DstBlock		  "Sum1"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Constant1"
+		  SrcPort		  1
+		  Points		  [50, 0; 0, -35]
+		  DstBlock		  "Sum1"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Sum1"
+		  SrcPort		  1
+		  DstBlock		  "out1"
+		  DstPort		  1
+		}
+	      }
+	    }
+	    Block {
+	      BlockType		      Saturate
+	      Name		      "Saturation8"
+	      Position		      [95, 70, 115, 90]
+	      ShowName		      off
+	      UpperLimit	      "MFS"
+	      LowerLimit	      "0"
+	    }
+	    Block {
+	      BlockType		      Step
+	      Name		      "Step"
+	      Position		      [50, 135, 80, 165]
+	      Time		      "To"
+	      Before		      "1"
+	      After		      "0"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "y"
+	      Position		      [305, 83, 335, 97]
+	      Port		      "1"
+	      OutputWhenDisabled      held
+	      InitialOutput	      "0"
+	    }
+	    Line {
+	      SrcBlock		      "Ramp"
+	      SrcPort		      1
+	      DstBlock		      "Saturation8"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Saturation8"
+	      SrcPort		      1
+	      DstBlock		      "Product1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Step"
+	      SrcPort		      1
+	      Points		      [45, 0; 0, -60]
+	      DstBlock		      "Product1"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Product1"
+	      SrcPort		      1
+	      DstBlock		      "y"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Constant5"
+	      SrcPort		      1
+	      Points		      [10, 0]
+	      DstBlock		      "Product1"
+	      DstPort		      3
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "DGN2"
+	  Ports			  [0, 1, 0, 0, 0]
+	  Position		  [30, 77, 65, 103]
+	  BackgroundColor	  red
+	  NamePlacement		  alternate
+	  ShowPortLabels	  on
+	  MaskType		  "Fault generator"
+	  MaskDescription	  "Used for generation of abrupt and incipient"
+" standarised fault strength values.\n\nParameters: \nFrom - fault start time "
+"[s]\nTo - fault decay time [s] \nMax Fault Strength - maximum fault strength "
+"value that will be reached during simulation [standarised range - 0 1]\nFault"
+" Development Time - after this time Max Fault Strength will be reached [s]\nD"
+"irection - defines the sign of fault strength."
+	  MaskHelp		  "web( [ 'file:///' which('DABLib.pdf')]);"
+	  MaskPromptString	  "From:|To:|Max Fault Strength:|Fault Develop"
+"ment Time:|Direction:"
+	  MaskStyleString	  "edit,edit,edit,edit,edit"
+	  MaskTunableValueString  "on,on,on,on,on"
+	  MaskVariables		  "From=@1;To=@2;MFS=@3;FDT=@4;FSD=@5;"
+	  MaskInitialization	  "if FDT==0\n FDS = 9999999999999999999999999"
+"9;\nelse\n FDS = MFS / FDT;\nend\nif To==inf\n To = 9999999999999999999999999"
+"9;\nend\nif FSD >= 0\nFSD=1;\nelse\nFSD=-1;\nend"
+	  MaskDisplay		  "disp('FGen') "
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  port
+	  MaskIconUnits		  normalized
+	  MaskValueString	  "45|50|1|0|1"
+	  System {
+	    Name		    "DGN2"
+	    Location		    [343, 416, 705, 665]
+	    Open		    off
+	    ToolBar		    off
+	    StatusBar		    off
+	    ScreenColor		    white
+	    PaperOrientation	    landscape
+	    PaperPositionMode	    auto
+	    PaperType		    usletter
+	    PaperUnits		    inches
+	    Block {
+	      BlockType		      Constant
+	      Name		      "Constant5"
+	      Position		      [145, 177, 175, 203]
+	      ShowName		      off
+	      Value		      "FSD"
+	    }
+	    Block {
+	      BlockType		      Product
+	      Name		      "Product1"
+	      Ports		      [3, 1, 0, 0, 0]
+	      Position		      [205, 73, 235, 107]
+	      ShowName		      off
+	      Inputs		      "3"
+	    }
+	    Block {
+	      BlockType		      SubSystem
+	      Name		      "Ramp"
+	      Ports		      [0, 1, 0, 0, 0]
+	      Position		      [45, 65, 75, 95]
+	      ShowPortLabels	      on
+	      MaskType		      "Ramp"
+	      MaskDescription	      "ramp"
+	      MaskPromptString	      "Slope:|Start time:|Initial output:"
+	      MaskStyleString	      "edit,edit,edit"
+	      MaskTunableValueString  "on,on,on"
+	      MaskVariables	      "slope=@1;start=@2;X0=@3;"
+	      MaskDisplay	      "plot([0:10],[1,1,1,1:8])"
+	      MaskIconFrame	      on
+	      MaskIconOpaque	      on
+	      MaskIconRotate	      none
+	      MaskIconUnits	      autoscale
+	      MaskValueString	      "FDS|From|0"
+	      System {
+		Name			"Ramp"
+		Location		[490, 319, 924, 523]
+		Open			off
+		ToolBar			off
+		StatusBar		off
+		ScreenColor		white
+		PaperOrientation	landscape
+		PaperPositionMode	auto
+		PaperType		usletter
+		PaperUnits		inches
+		Block {
+		  BlockType		  Clock
+		  Name			  "Clock"
+		  Position		  [75, 75, 95, 95]
+		  Location		  [30, 40, 110, 80]
+		}
+		Block {
+		  BlockType		  Constant
+		  Name			  "Constant"
+		  Position		  [30, 104, 65, 126]
+		  Value			  "start"
+		}
+		Block {
+		  BlockType		  Constant
+		  Name			  "Constant1"
+		  Position		  [175, 149, 210, 171]
+		  Value			  "X0"
+		}
+		Block {
+		  BlockType		  Product
+		  Name			  "Product"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [225, 83, 255, 107]
+		  Inputs		  "2"
+		}
+		Block {
+		  BlockType		  Step
+		  Name			  "Step"
+		  Position		  [175, 27, 205, 53]
+		  Time			  "start"
+		  Before		  "0"
+		  After			  "slope"
+		}
+		Block {
+		  BlockType		  Sum
+		  Name			  "Sum"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [135, 69, 165, 131]
+		  Inputs		  "+-"
+		}
+		Block {
+		  BlockType		  Sum
+		  Name			  "Sum1"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [300, 79, 330, 141]
+		  Inputs		  "++"
+		}
+		Block {
+		  BlockType		  Outport
+		  Name			  "out1"
+		  Position		  [370, 103, 400, 117]
+		  Port			  "1"
+		  OutputWhenDisabled	  held
+		  InitialOutput		  "[]"
+		}
+		Line {
+		  SrcBlock		  "Sum"
+		  SrcPort		  1
+		  DstBlock		  "Product"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Constant"
+		  SrcPort		  1
+		  DstBlock		  "Sum"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Clock"
+		  SrcPort		  1
+		  DstBlock		  "Sum"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Step"
+		  SrcPort		  1
+		  DstBlock		  "Product"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Product"
+		  SrcPort		  1
+		  DstBlock		  "Sum1"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Constant1"
+		  SrcPort		  1
+		  Points		  [50, 0; 0, -35]
+		  DstBlock		  "Sum1"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Sum1"
+		  SrcPort		  1
+		  DstBlock		  "out1"
+		  DstPort		  1
+		}
+	      }
+	    }
+	    Block {
+	      BlockType		      Saturate
+	      Name		      "Saturation8"
+	      Position		      [95, 70, 115, 90]
+	      ShowName		      off
+	      UpperLimit	      "MFS"
+	      LowerLimit	      "0"
+	    }
+	    Block {
+	      BlockType		      Step
+	      Name		      "Step"
+	      Position		      [50, 135, 80, 165]
+	      Time		      "To"
+	      Before		      "1"
+	      After		      "0"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "y"
+	      Position		      [305, 83, 335, 97]
+	      Port		      "1"
+	      OutputWhenDisabled      held
+	      InitialOutput	      "0"
+	    }
+	    Line {
+	      SrcBlock		      "Ramp"
+	      SrcPort		      1
+	      DstBlock		      "Saturation8"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Saturation8"
+	      SrcPort		      1
+	      DstBlock		      "Product1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Step"
+	      SrcPort		      1
+	      Points		      [45, 0; 0, -60]
+	      DstBlock		      "Product1"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Product1"
+	      SrcPort		      1
+	      DstBlock		      "y"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Constant5"
+	      SrcPort		      1
+	      Points		      [10, 0]
+	      DstBlock		      "Product1"
+	      DstPort		      3
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "DGN3"
+	  Ports			  [0, 1, 0, 0, 0]
+	  Position		  [30, 157, 65, 183]
+	  BackgroundColor	  red
+	  NamePlacement		  alternate
+	  ShowPortLabels	  on
+	  MaskType		  "Fault generator"
+	  MaskDescription	  "Used for generation of abrupt and incipient"
+" standarised fault strength values.\n\nParameters: \nFrom - fault start time "
+"[s]\nTo - fault decay time [s] \nMax Fault Strength - maximum fault strength "
+"value that will be reached during simulation [standarised range - 0 1]\nFault"
+" Development Time - after this time Max Fault Strength will be reached [s]\nD"
+"irection - defines the sign of fault strength."
+	  MaskHelp		  "web( [ 'file:///' which('DABLib.pdf')]);"
+	  MaskPromptString	  "From:|To:|Max Fault Strength:|Fault Develop"
+"ment Time:|Direction:"
+	  MaskStyleString	  "edit,edit,edit,edit,edit"
+	  MaskTunableValueString  "on,on,on,on,on"
+	  MaskVariables		  "From=@1;To=@2;MFS=@3;FDT=@4;FSD=@5;"
+	  MaskInitialization	  "if FDT==0\n FDS = 9999999999999999999999999"
+"9;\nelse\n FDS = MFS / FDT;\nend\nif To==inf\n To = 9999999999999999999999999"
+"9;\nend\nif FSD >= 0\nFSD=1;\nelse\nFSD=-1;\nend"
+	  MaskDisplay		  "disp('FGen') "
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  port
+	  MaskIconUnits		  normalized
+	  MaskValueString	  "30|40|1|0|1"
+	  System {
+	    Name		    "DGN3"
+	    Location		    [343, 416, 705, 665]
+	    Open		    off
+	    ToolBar		    off
+	    StatusBar		    off
+	    ScreenColor		    white
+	    PaperOrientation	    landscape
+	    PaperPositionMode	    auto
+	    PaperType		    usletter
+	    PaperUnits		    inches
+	    Block {
+	      BlockType		      Constant
+	      Name		      "Constant5"
+	      Position		      [145, 177, 175, 203]
+	      ShowName		      off
+	      Value		      "FSD"
+	    }
+	    Block {
+	      BlockType		      Product
+	      Name		      "Product1"
+	      Ports		      [3, 1, 0, 0, 0]
+	      Position		      [205, 73, 235, 107]
+	      ShowName		      off
+	      Inputs		      "3"
+	    }
+	    Block {
+	      BlockType		      SubSystem
+	      Name		      "Ramp"
+	      Ports		      [0, 1, 0, 0, 0]
+	      Position		      [45, 65, 75, 95]
+	      ShowPortLabels	      on
+	      MaskType		      "Ramp"
+	      MaskDescription	      "ramp"
+	      MaskPromptString	      "Slope:|Start time:|Initial output:"
+	      MaskStyleString	      "edit,edit,edit"
+	      MaskTunableValueString  "on,on,on"
+	      MaskVariables	      "slope=@1;start=@2;X0=@3;"
+	      MaskDisplay	      "plot([0:10],[1,1,1,1:8])"
+	      MaskIconFrame	      on
+	      MaskIconOpaque	      on
+	      MaskIconRotate	      none
+	      MaskIconUnits	      autoscale
+	      MaskValueString	      "FDS|From|0"
+	      System {
+		Name			"Ramp"
+		Location		[490, 319, 924, 523]
+		Open			off
+		ToolBar			off
+		StatusBar		off
+		ScreenColor		white
+		PaperOrientation	landscape
+		PaperPositionMode	auto
+		PaperType		usletter
+		PaperUnits		inches
+		Block {
+		  BlockType		  Clock
+		  Name			  "Clock"
+		  Position		  [75, 75, 95, 95]
+		  Location		  [30, 40, 110, 80]
+		}
+		Block {
+		  BlockType		  Constant
+		  Name			  "Constant"
+		  Position		  [30, 104, 65, 126]
+		  Value			  "start"
+		}
+		Block {
+		  BlockType		  Constant
+		  Name			  "Constant1"
+		  Position		  [175, 149, 210, 171]
+		  Value			  "X0"
+		}
+		Block {
+		  BlockType		  Product
+		  Name			  "Product"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [225, 83, 255, 107]
+		  Inputs		  "2"
+		}
+		Block {
+		  BlockType		  Step
+		  Name			  "Step"
+		  Position		  [175, 27, 205, 53]
+		  Time			  "start"
+		  Before		  "0"
+		  After			  "slope"
+		}
+		Block {
+		  BlockType		  Sum
+		  Name			  "Sum"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [135, 69, 165, 131]
+		  Inputs		  "+-"
+		}
+		Block {
+		  BlockType		  Sum
+		  Name			  "Sum1"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [300, 79, 330, 141]
+		  Inputs		  "++"
+		}
+		Block {
+		  BlockType		  Outport
+		  Name			  "out1"
+		  Position		  [370, 103, 400, 117]
+		  Port			  "1"
+		  OutputWhenDisabled	  held
+		  InitialOutput		  "[]"
+		}
+		Line {
+		  SrcBlock		  "Sum"
+		  SrcPort		  1
+		  DstBlock		  "Product"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Constant"
+		  SrcPort		  1
+		  DstBlock		  "Sum"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Clock"
+		  SrcPort		  1
+		  DstBlock		  "Sum"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Step"
+		  SrcPort		  1
+		  DstBlock		  "Product"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Product"
+		  SrcPort		  1
+		  DstBlock		  "Sum1"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Constant1"
+		  SrcPort		  1
+		  Points		  [50, 0; 0, -35]
+		  DstBlock		  "Sum1"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Sum1"
+		  SrcPort		  1
+		  DstBlock		  "out1"
+		  DstPort		  1
+		}
+	      }
+	    }
+	    Block {
+	      BlockType		      Saturate
+	      Name		      "Saturation8"
+	      Position		      [95, 70, 115, 90]
+	      ShowName		      off
+	      UpperLimit	      "MFS"
+	      LowerLimit	      "0"
+	    }
+	    Block {
+	      BlockType		      Step
+	      Name		      "Step"
+	      Position		      [50, 135, 80, 165]
+	      Time		      "To"
+	      Before		      "1"
+	      After		      "0"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "y"
+	      Position		      [305, 83, 335, 97]
+	      Port		      "1"
+	      OutputWhenDisabled      held
+	      InitialOutput	      "0"
+	    }
+	    Line {
+	      SrcBlock		      "Ramp"
+	      SrcPort		      1
+	      DstBlock		      "Saturation8"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Saturation8"
+	      SrcPort		      1
+	      DstBlock		      "Product1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Step"
+	      SrcPort		      1
+	      Points		      [45, 0; 0, -60]
+	      DstBlock		      "Product1"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Product1"
+	      SrcPort		      1
+	      DstBlock		      "y"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Constant5"
+	      SrcPort		      1
+	      Points		      [10, 0]
+	      DstBlock		      "Product1"
+	      DstPort		      3
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "FGen2"
+	  Ports			  [0, 1, 0, 0, 0]
+	  Position		  [185, 32, 220, 58]
+	  BackgroundColor	  red
+	  ShowName		  off
+	  ShowPortLabels	  on
+	  MaskType		  "Fault generator"
+	  MaskDescription	  "Used for generation of abrupt and incipient"
+" standarised fault strength values.\n\nParameters: \nFrom - fault start time "
+"[s]\nTo - fault decay time [s] \nMax Fault Strength - maximum fault strength "
+"value that will be reached during simulation [standarised range - 0 1]\nFault"
+" Development Time - after this time Max Fault Strength will be reached [s]\nD"
+"irection - defines the sign of fault strength."
+	  MaskHelp		  "web( [ 'file:///' which('DABLib.pdf')]);"
+	  MaskPromptString	  "From:|To:|Max Fault Strength:|Fault Develop"
+"ment Time:|Direction:"
+	  MaskStyleString	  "edit,edit,edit,edit,edit"
+	  MaskTunableValueString  "on,on,on,on,on"
+	  MaskVariables		  "From=@1;To=@2;MFS=@3;FDT=@4;FSD=@5;"
+	  MaskInitialization	  "if FDT==0\n FDS = 9999999999999999999999999"
+"9;\nelse\n FDS = MFS / FDT;\nend\nif To==inf\n To = 9999999999999999999999999"
+"9;\nend\nif FSD >= 0\nFSD=1;\nelse\nFSD=-1;\nend"
+	  MaskDisplay		  "disp('FGen') "
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  port
+	  MaskIconUnits		  normalized
+	  MaskValueString	  "35|45|1|0|1"
+	  System {
+	    Name		    "FGen2"
+	    Location		    [343, 416, 705, 665]
+	    Open		    off
+	    ToolBar		    off
+	    StatusBar		    off
+	    ScreenColor		    white
+	    PaperOrientation	    landscape
+	    PaperPositionMode	    auto
+	    PaperType		    usletter
+	    PaperUnits		    inches
+	    Block {
+	      BlockType		      Constant
+	      Name		      "Constant5"
+	      Position		      [145, 177, 175, 203]
+	      ShowName		      off
+	      Value		      "FSD"
+	    }
+	    Block {
+	      BlockType		      Product
+	      Name		      "Product1"
+	      Ports		      [3, 1, 0, 0, 0]
+	      Position		      [205, 73, 235, 107]
+	      ShowName		      off
+	      Inputs		      "3"
+	    }
+	    Block {
+	      BlockType		      SubSystem
+	      Name		      "Ramp"
+	      Ports		      [0, 1, 0, 0, 0]
+	      Position		      [45, 65, 75, 95]
+	      ShowPortLabels	      on
+	      MaskType		      "Ramp"
+	      MaskDescription	      "ramp"
+	      MaskPromptString	      "Slope:|Start time:|Initial output:"
+	      MaskStyleString	      "edit,edit,edit"
+	      MaskTunableValueString  "on,on,on"
+	      MaskVariables	      "slope=@1;start=@2;X0=@3;"
+	      MaskDisplay	      "plot([0:10],[1,1,1,1:8])"
+	      MaskIconFrame	      on
+	      MaskIconOpaque	      on
+	      MaskIconRotate	      none
+	      MaskIconUnits	      autoscale
+	      MaskValueString	      "FDS|From|0"
+	      System {
+		Name			"Ramp"
+		Location		[490, 319, 924, 523]
+		Open			off
+		ToolBar			off
+		StatusBar		off
+		ScreenColor		white
+		PaperOrientation	landscape
+		PaperPositionMode	auto
+		PaperType		usletter
+		PaperUnits		inches
+		Block {
+		  BlockType		  Clock
+		  Name			  "Clock"
+		  Position		  [75, 75, 95, 95]
+		  Location		  [30, 40, 110, 80]
+		}
+		Block {
+		  BlockType		  Constant
+		  Name			  "Constant"
+		  Position		  [30, 104, 65, 126]
+		  Value			  "start"
+		}
+		Block {
+		  BlockType		  Constant
+		  Name			  "Constant1"
+		  Position		  [175, 149, 210, 171]
+		  Value			  "X0"
+		}
+		Block {
+		  BlockType		  Product
+		  Name			  "Product"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [225, 83, 255, 107]
+		  Inputs		  "2"
+		}
+		Block {
+		  BlockType		  Step
+		  Name			  "Step"
+		  Position		  [175, 27, 205, 53]
+		  Time			  "start"
+		  Before		  "0"
+		  After			  "slope"
+		}
+		Block {
+		  BlockType		  Sum
+		  Name			  "Sum"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [135, 69, 165, 131]
+		  Inputs		  "+-"
+		}
+		Block {
+		  BlockType		  Sum
+		  Name			  "Sum1"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [300, 79, 330, 141]
+		  Inputs		  "++"
+		}
+		Block {
+		  BlockType		  Outport
+		  Name			  "out1"
+		  Position		  [370, 103, 400, 117]
+		  Port			  "1"
+		  OutputWhenDisabled	  held
+		  InitialOutput		  "[]"
+		}
+		Line {
+		  SrcBlock		  "Sum"
+		  SrcPort		  1
+		  DstBlock		  "Product"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Constant"
+		  SrcPort		  1
+		  DstBlock		  "Sum"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Clock"
+		  SrcPort		  1
+		  DstBlock		  "Sum"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Step"
+		  SrcPort		  1
+		  DstBlock		  "Product"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Product"
+		  SrcPort		  1
+		  DstBlock		  "Sum1"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Constant1"
+		  SrcPort		  1
+		  Points		  [50, 0; 0, -35]
+		  DstBlock		  "Sum1"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Sum1"
+		  SrcPort		  1
+		  DstBlock		  "out1"
+		  DstPort		  1
+		}
+	      }
+	    }
+	    Block {
+	      BlockType		      Saturate
+	      Name		      "Saturation8"
+	      Position		      [95, 70, 115, 90]
+	      ShowName		      off
+	      UpperLimit	      "MFS"
+	      LowerLimit	      "0"
+	    }
+	    Block {
+	      BlockType		      Step
+	      Name		      "Step"
+	      Position		      [50, 135, 80, 165]
+	      Time		      "To"
+	      Before		      "1"
+	      After		      "0"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "y"
+	      Position		      [305, 83, 335, 97]
+	      Port		      "1"
+	      OutputWhenDisabled      held
+	      InitialOutput	      "0"
+	    }
+	    Line {
+	      SrcBlock		      "Ramp"
+	      SrcPort		      1
+	      DstBlock		      "Saturation8"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Saturation8"
+	      SrcPort		      1
+	      DstBlock		      "Product1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Step"
+	      SrcPort		      1
+	      Points		      [45, 0; 0, -60]
+	      DstBlock		      "Product1"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Product1"
+	      SrcPort		      1
+	      DstBlock		      "y"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Constant5"
+	      SrcPort		      1
+	      Points		      [10, 0]
+	      DstBlock		      "Product1"
+	      DstPort		      3
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "FGen3"
+	  Ports			  [0, 1, 0, 0, 0]
+	  Position		  [230, 57, 265, 83]
+	  BackgroundColor	  red
+	  ShowName		  off
+	  ShowPortLabels	  on
+	  MaskType		  "Fault generator"
+	  MaskDescription	  "Used for generation of abrupt and incipient"
+" standarised fault strength values.\n\nParameters: \nFrom - fault start time "
+"[s]\nTo - fault decay time [s] \nMax Fault Strength - maximum fault strength "
+"value that will be reached during simulation [standarised range - 0 1]\nFault"
+" Development Time - after this time Max Fault Strength will be reached [s]\nD"
+"irection - defines the sign of fault strength."
+	  MaskHelp		  "web( [ 'file:///' which('DABLib.pdf')]);"
+	  MaskPromptString	  "From:|To:|Max Fault Strength:|Fault Develop"
+"ment Time:|Direction:"
+	  MaskStyleString	  "edit,edit,edit,edit,edit"
+	  MaskTunableValueString  "on,on,on,on,on"
+	  MaskVariables		  "From=@1;To=@2;MFS=@3;FDT=@4;FSD=@5;"
+	  MaskInitialization	  "if FDT==0\n FDS = 9999999999999999999999999"
+"9;\nelse\n FDS = MFS / FDT;\nend\nif To==inf\n To = 9999999999999999999999999"
+"9;\nend\nif FSD >= 0\nFSD=1;\nelse\nFSD=-1;\nend"
+	  MaskDisplay		  "disp('FGen') "
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  port
+	  MaskIconUnits		  normalized
+	  MaskValueString	  "90|95|1|0|1"
+	  System {
+	    Name		    "FGen3"
+	    Location		    [343, 416, 705, 665]
+	    Open		    off
+	    ToolBar		    off
+	    StatusBar		    off
+	    ScreenColor		    white
+	    PaperOrientation	    landscape
+	    PaperPositionMode	    auto
+	    PaperType		    usletter
+	    PaperUnits		    inches
+	    Block {
+	      BlockType		      Constant
+	      Name		      "Constant5"
+	      Position		      [145, 177, 175, 203]
+	      ShowName		      off
+	      Value		      "FSD"
+	    }
+	    Block {
+	      BlockType		      Product
+	      Name		      "Product1"
+	      Ports		      [3, 1, 0, 0, 0]
+	      Position		      [205, 73, 235, 107]
+	      ShowName		      off
+	      Inputs		      "3"
+	    }
+	    Block {
+	      BlockType		      SubSystem
+	      Name		      "Ramp"
+	      Ports		      [0, 1, 0, 0, 0]
+	      Position		      [45, 65, 75, 95]
+	      ShowPortLabels	      on
+	      MaskType		      "Ramp"
+	      MaskDescription	      "ramp"
+	      MaskPromptString	      "Slope:|Start time:|Initial output:"
+	      MaskStyleString	      "edit,edit,edit"
+	      MaskTunableValueString  "on,on,on"
+	      MaskVariables	      "slope=@1;start=@2;X0=@3;"
+	      MaskDisplay	      "plot([0:10],[1,1,1,1:8])"
+	      MaskIconFrame	      on
+	      MaskIconOpaque	      on
+	      MaskIconRotate	      none
+	      MaskIconUnits	      autoscale
+	      MaskValueString	      "FDS|From|0"
+	      System {
+		Name			"Ramp"
+		Location		[490, 319, 924, 523]
+		Open			off
+		ToolBar			off
+		StatusBar		off
+		ScreenColor		white
+		PaperOrientation	landscape
+		PaperPositionMode	auto
+		PaperType		usletter
+		PaperUnits		inches
+		Block {
+		  BlockType		  Clock
+		  Name			  "Clock"
+		  Position		  [75, 75, 95, 95]
+		  Location		  [30, 40, 110, 80]
+		}
+		Block {
+		  BlockType		  Constant
+		  Name			  "Constant"
+		  Position		  [30, 104, 65, 126]
+		  Value			  "start"
+		}
+		Block {
+		  BlockType		  Constant
+		  Name			  "Constant1"
+		  Position		  [175, 149, 210, 171]
+		  Value			  "X0"
+		}
+		Block {
+		  BlockType		  Product
+		  Name			  "Product"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [225, 83, 255, 107]
+		  Inputs		  "2"
+		}
+		Block {
+		  BlockType		  Step
+		  Name			  "Step"
+		  Position		  [175, 27, 205, 53]
+		  Time			  "start"
+		  Before		  "0"
+		  After			  "slope"
+		}
+		Block {
+		  BlockType		  Sum
+		  Name			  "Sum"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [135, 69, 165, 131]
+		  Inputs		  "+-"
+		}
+		Block {
+		  BlockType		  Sum
+		  Name			  "Sum1"
+		  Ports			  [2, 1, 0, 0, 0]
+		  Position		  [300, 79, 330, 141]
+		  Inputs		  "++"
+		}
+		Block {
+		  BlockType		  Outport
+		  Name			  "out1"
+		  Position		  [370, 103, 400, 117]
+		  Port			  "1"
+		  OutputWhenDisabled	  held
+		  InitialOutput		  "[]"
+		}
+		Line {
+		  SrcBlock		  "Sum"
+		  SrcPort		  1
+		  DstBlock		  "Product"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Constant"
+		  SrcPort		  1
+		  DstBlock		  "Sum"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Clock"
+		  SrcPort		  1
+		  DstBlock		  "Sum"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Step"
+		  SrcPort		  1
+		  DstBlock		  "Product"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Product"
+		  SrcPort		  1
+		  DstBlock		  "Sum1"
+		  DstPort		  1
+		}
+		Line {
+		  SrcBlock		  "Constant1"
+		  SrcPort		  1
+		  Points		  [50, 0; 0, -35]
+		  DstBlock		  "Sum1"
+		  DstPort		  2
+		}
+		Line {
+		  SrcBlock		  "Sum1"
+		  SrcPort		  1
+		  DstBlock		  "out1"
+		  DstPort		  1
+		}
+	      }
+	    }
+	    Block {
+	      BlockType		      Saturate
+	      Name		      "Saturation8"
+	      Position		      [95, 70, 115, 90]
+	      ShowName		      off
+	      UpperLimit	      "MFS"
+	      LowerLimit	      "0"
+	    }
+	    Block {
+	      BlockType		      Step
+	      Name		      "Step"
+	      Position		      [50, 135, 80, 165]
+	      Time		      "To"
+	      Before		      "1"
+	      After		      "0"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "y"
+	      Position		      [305, 83, 335, 97]
+	      Port		      "1"
+	      OutputWhenDisabled      held
+	      InitialOutput	      "0"
+	    }
+	    Line {
+	      SrcBlock		      "Ramp"
+	      SrcPort		      1
+	      DstBlock		      "Saturation8"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Saturation8"
+	      SrcPort		      1
+	      DstBlock		      "Product1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Step"
+	      SrcPort		      1
+	      Points		      [45, 0; 0, -60]
+	      DstBlock		      "Product1"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Product1"
+	      SrcPort		      1
+	      DstBlock		      "y"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Constant5"
+	      SrcPort		      1
+	      Points		      [10, 0]
+	      DstBlock		      "Product1"
+	      DstPort		      3
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "L"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [175, 120, 190, 155]
+	  ShowName		  off
+	  Inputs		  "++"
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "L1"
+	  Ports			  [3, 1, 0, 0, 0]
+	  Position		  [300, 27, 315, 63]
+	  ShowName		  off
+	  Inputs		  "+++"
+	}
+	Block {
+	  BlockType		  Mux
+	  Name			  "Mux"
+	  Ports			  [19, 1, 0, 0, 0]
+	  Position		  [345, 194, 375, 416]
+	  BackgroundColor	  black
+	  ShowName		  off
+	  Inputs		  "19"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "DD"
+	  Position		  [410, 38, 440, 52]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "PID"
+	  Position		  [410, 83, 440, 97]
+	  Port			  "2"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "CID"
+	  Position		  [410, 133, 440, 147]
+	  Port			  "3"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "FFID"
+	  Position		  [410, 163, 440, 177]
+	  Port			  "4"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "f"
+	  Position		  [405, 298, 435, 312]
+	  Port			  "5"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Line {
+	  SrcBlock		  "L"
+	  SrcPort		  1
+	  Points		  [5, 0]
+	  Branch {
+	    Points		    [0, 35]
+	    DstBlock		    "BZ-Fault Free 3"
+	    DstPort		    1
+	  }
+	  Branch {
+	    DstBlock		    "CID"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "DGN0"
+	  SrcPort		  1
+	  Points		  [10, 0]
+	  Branch {
+	    Points		    [0, 45]
+	    Branch {
+	      DstBlock		      "Mux"
+	      DstPort		      1
+	    }
+	    Branch {
+	      Points		      [0, 10]
+	      Branch {
+		DstBlock		"Mux"
+		DstPort			2
+	      }
+	      Branch {
+		Points			[0, 10]
+		DstBlock		"Mux"
+		DstPort			3
+	      }
+	    }
+	  }
+	  Branch {
+	    DstBlock		    "FFID"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "DGN1"
+	  SrcPort		  1
+	  Points		  [75, 0]
+	  Branch {
+	    DstBlock		    "L"
+	    DstPort		    1
+	  }
+	  Branch {
+	    Points		    [0, 115]
+	    Branch {
+	      DstBlock		      "Mux"
+	      DstPort		      4
+	    }
+	    Branch {
+	      Points		      [0, 10]
+	      Branch {
+		DstBlock		"Mux"
+		DstPort			5
+	      }
+	      Branch {
+		Points			[0, 10]
+		Branch {
+		  DstBlock		  "Mux"
+		  DstPort		  6
+		}
+		Branch {
+		  Points		  [0, 10]
+		  DstBlock		  "Mux"
+		  DstPort		  7
+		}
+	      }
+	    }
+	  }
+	}
+	Line {
+	  SrcBlock		  "DGN2"
+	  SrcPort		  1
+	  Points		  [40, 0]
+	  Branch {
+	    Points		    [100, 0]
+	    Branch {
+	      DstBlock		      "BZ-Fault Free 2"
+	      DstPort		      1
+	    }
+	    Branch {
+	      DstBlock		      "PID"
+	      DstPort		      1
+	    }
+	  }
+	  Branch {
+	    Points		    [0, 195]
+	    Branch {
+	      DstBlock		      "Mux"
+	      DstPort		      8
+	    }
+	    Branch {
+	      Points		      [0, 10]
+	      Branch {
+		DstBlock		"Mux"
+		DstPort			9
+	      }
+	      Branch {
+		Points			[0, 10]
+		Branch {
+		  DstBlock		  "Mux"
+		  DstPort		  10
+		}
+		Branch {
+		  Points		  [0, 10]
+		  Branch {
+		    DstBlock		    "Mux"
+		    DstPort		    11
+		  }
+		  Branch {
+		    Points		    [0, 10]
+		    Branch {
+		    DstBlock		    "Mux"
+		    DstPort		    12
+		    }
+		    Branch {
+		    Points		    [0, 10]
+		    Branch {
+		    DstBlock		    "Mux"
+		    DstPort		    13
+		    }
+		    Branch {
+		    Points		    [0, 10]
+		    DstBlock		    "Mux"
+		    DstPort		    14
+		    }
+		    }
+		  }
+		}
+	      }
+	    }
+	  }
+	}
+	Line {
+	  SrcBlock		  "DGN3"
+	  SrcPort		  1
+	  Points		  [15, 0]
+	  Branch {
+	    Points		    [75, 0]
+	    DstBlock		    "L"
+	    DstPort		    2
+	  }
+	  Branch {
+	    Points		    [0, 185]
+	    Branch {
+	      DstBlock		      "Mux"
+	      DstPort		      15
+	    }
+	    Branch {
+	      Points		      [0, 10]
+	      Branch {
+		DstBlock		"Mux"
+		DstPort			16
+	      }
+	      Branch {
+		Points			[0, 10]
+		Branch {
+		  DstBlock		  "Mux"
+		  DstPort		  17
+		}
+		Branch {
+		  Points		  [0, 10]
+		  Branch {
+		    DstBlock		    "Mux"
+		    DstPort		    18
+		  }
+		  Branch {
+		    Points		    [0, 10]
+		    DstBlock		    "Mux"
+		    DstPort		    19
+		  }
+		}
+	      }
+	    }
+	  }
+	}
+	Line {
+	  SrcBlock		  "Mux"
+	  SrcPort		  1
+	  DstBlock		  "f"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "BZ-Fault Free 2"
+	  SrcPort		  1
+	  DstBlock		  "DGN0"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "BZ-Fault Free 3"
+	  SrcPort		  1
+	  DstBlock		  "DGN0"
+	  DstPort		  2
+	}
+	Line {
+	  Labels		  [0, 0]
+	  SrcBlock		  "<>DGN0"
+	  SrcPort		  1
+	  Points		  [5, 0; 0, 10]
+	  DstBlock		  "L1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "FGen2"
+	  SrcPort		  1
+	  DstBlock		  "L1"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "FGen3"
+	  SrcPort		  1
+	  Points		  [5, 0; 0, -15]
+	  DstBlock		  "L1"
+	  DstPort		  3
+	}
+	Line {
+	  SrcBlock		  "L1"
+	  SrcPort		  1
+	  DstBlock		  "DD"
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "FFID"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [170, 245, 200, 255]
+      Floating		      off
+      Location		      [341, 371, 669, 526]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "auto"
+      YMin		      "0"
+      YMax		      "1.1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Fault Simulation"
+      Ports		      [0, 1, 0, 0, 0]
+      Position		      [90, 97, 125, 123]
+      BackgroundColor	      red
+      NamePlacement	      alternate
+      ShowPortLabels	      on
+      MaskType		      "Fault generator"
+      MaskDescription	      "Used for generation of abrupt and incipient sta"
+"ndarised fault strength values.\n\nParameters: \nFrom - fault start time [s]"
+"\nTo - fault decay time [s] \nMax Fault Strength - maximum fault strength val"
+"ue that will be reached during simulation [standarised range - 0 1]\nFault De"
+"velopment Time - after this time Max Fault Strength will be reached [s]\nDire"
+"ction - defines the sign of fault strength."
+      MaskHelp		      "web( [ 'file:///' which('DABLib.pdf')]);"
+      MaskPromptString	      "From:|To:|Max Fault Strength:|Fault Development"
+" Time:|Direction:"
+      MaskStyleString	      "edit,edit,edit,edit,edit"
+      MaskTunableValueString  "on,on,on,on,on"
+      MaskVariables	      "From=@1;To=@2;MFS=@3;FDT=@4;FSD=@5;"
+      MaskInitialization      "if FDT==0\n FDS = 99999999999999999999999999;\n"
+"else\n FDS = MFS / FDT;\nend\nif To==inf\n To = 99999999999999999999999999;\n"
+"end\nif FSD >= 0\nFSD=1;\nelse\nFSD=-1;\nend"
+      MaskDisplay	      "disp('FGen') "
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      port
+      MaskIconUnits	      normalized
+      MaskValueString	      "25|75|1|25|1"
+      System {
+	Name			"Fault Simulation"
+	Location		[343, 416, 705, 665]
+	Open			off
+	ToolBar			off
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  Constant
+	  Name			  "Constant5"
+	  Position		  [145, 177, 175, 203]
+	  ShowName		  off
+	  Value			  "FSD"
+	}
+	Block {
+	  BlockType		  Product
+	  Name			  "Product1"
+	  Ports			  [3, 1, 0, 0, 0]
+	  Position		  [205, 73, 235, 107]
+	  ShowName		  off
+	  Inputs		  "3"
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "Ramp"
+	  Ports			  [0, 1, 0, 0, 0]
+	  Position		  [45, 65, 75, 95]
+	  ShowPortLabels	  on
+	  MaskType		  "Ramp"
+	  MaskDescription	  "ramp"
+	  MaskPromptString	  "Slope:|Start time:|Initial output:"
+	  MaskStyleString	  "edit,edit,edit"
+	  MaskTunableValueString  "on,on,on"
+	  MaskVariables		  "slope=@1;start=@2;X0=@3;"
+	  MaskDisplay		  "plot([0:10],[1,1,1,1:8])"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  none
+	  MaskIconUnits		  autoscale
+	  MaskValueString	  "FDS|From|0"
+	  System {
+	    Name		    "Ramp"
+	    Location		    [490, 319, 924, 523]
+	    Open		    off
+	    ToolBar		    off
+	    StatusBar		    off
+	    ScreenColor		    white
+	    PaperOrientation	    landscape
+	    PaperPositionMode	    auto
+	    PaperType		    usletter
+	    PaperUnits		    inches
+	    Block {
+	      BlockType		      Clock
+	      Name		      "Clock"
+	      Position		      [75, 75, 95, 95]
+	      Location		      [30, 40, 110, 80]
+	    }
+	    Block {
+	      BlockType		      Constant
+	      Name		      "Constant"
+	      Position		      [30, 104, 65, 126]
+	      Value		      "start"
+	    }
+	    Block {
+	      BlockType		      Constant
+	      Name		      "Constant1"
+	      Position		      [175, 149, 210, 171]
+	      Value		      "X0"
+	    }
+	    Block {
+	      BlockType		      Product
+	      Name		      "Product"
+	      Ports		      [2, 1, 0, 0, 0]
+	      Position		      [225, 83, 255, 107]
+	      Inputs		      "2"
+	    }
+	    Block {
+	      BlockType		      Step
+	      Name		      "Step"
+	      Position		      [175, 27, 205, 53]
+	      Time		      "start"
+	      Before		      "0"
+	      After		      "slope"
+	    }
+	    Block {
+	      BlockType		      Sum
+	      Name		      "Sum"
+	      Ports		      [2, 1, 0, 0, 0]
+	      Position		      [135, 69, 165, 131]
+	      Inputs		      "+-"
+	    }
+	    Block {
+	      BlockType		      Sum
+	      Name		      "Sum1"
+	      Ports		      [2, 1, 0, 0, 0]
+	      Position		      [300, 79, 330, 141]
+	      Inputs		      "++"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "out1"
+	      Position		      [370, 103, 400, 117]
+	      Port		      "1"
+	      OutputWhenDisabled      held
+	      InitialOutput	      "[]"
+	    }
+	    Line {
+	      SrcBlock		      "Sum"
+	      SrcPort		      1
+	      DstBlock		      "Product"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Constant"
+	      SrcPort		      1
+	      DstBlock		      "Sum"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Clock"
+	      SrcPort		      1
+	      DstBlock		      "Sum"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Step"
+	      SrcPort		      1
+	      DstBlock		      "Product"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Product"
+	      SrcPort		      1
+	      DstBlock		      "Sum1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "Constant1"
+	      SrcPort		      1
+	      Points		      [50, 0; 0, -35]
+	      DstBlock		      "Sum1"
+	      DstPort		      2
+	    }
+	    Line {
+	      SrcBlock		      "Sum1"
+	      SrcPort		      1
+	      DstBlock		      "out1"
+	      DstPort		      1
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  Saturate
+	  Name			  "Saturation8"
+	  Position		  [95, 70, 115, 90]
+	  ShowName		  off
+	  UpperLimit		  "MFS"
+	  LowerLimit		  "0"
+	}
+	Block {
+	  BlockType		  Step
+	  Name			  "Step"
+	  Position		  [50, 135, 80, 165]
+	  Time			  "To"
+	  Before		  "1"
+	  After			  "0"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "y"
+	  Position		  [305, 83, 335, 97]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Line {
+	  SrcBlock		  "Ramp"
+	  SrcPort		  1
+	  DstBlock		  "Saturation8"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Saturation8"
+	  SrcPort		  1
+	  DstBlock		  "Product1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Step"
+	  SrcPort		  1
+	  Points		  [45, 0; 0, -60]
+	  DstBlock		  "Product1"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Product1"
+	  SrcPort		  1
+	  DstBlock		  "y"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant5"
+	  SrcPort		  1
+	  Points		  [10, 0]
+	  DstBlock		  "Product1"
+	  DstPort		  3
+	}
+      }
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux1"
+      Ports		      [12, 1, 0, 0, 0]
+      Position		      [425, 94, 440, 326]
+      BackgroundColor	      black
+      ShowName		      off
+      Inputs		      "12"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "PICalc"
+      Ports		      [6, 12, 0, 0, 0]
+      Position		      [240, 86, 365, 334]
+      DropShadow	      on
+      NamePlacement	      alternate
+      SourceBlock	      "DABLib/PICalc"
+      SourceType	      "Performance Indexes Calculator"
+      Step		      Other
+      FSel		      "NO FAULT"
+      FType		      "Abrupt - Small"
+      t_on_ini		      "0"
+      t_hor_ini		      "100"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "PID"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [170, 162, 200, 178]
+      Floating		      off
+      Location		      [342, 30, 667, 182]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "auto"
+      YMin		      "0"
+      YMax		      "1.1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "dacc"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [455, 397, 485, 413]
+      Floating		      off
+      Location		      [676, 780, 1009, 991]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "100"
+      YMin		      "0"
+      YMax		      "1.1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "fs"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [175, 82, 205, 98]
+      Floating		      off
+      Location		      [6, 30, 333, 297]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "auto"
+      YMin		      "0"
+      YMax		      "1.1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "fs_d"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [410, 378, 440, 392]
+      Floating		      off
+      Location		      [677, 551, 1008, 755]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "100"
+      YMin		      "-1"
+      YMax		      "1.1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "r_fd"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [330, 355, 360, 375]
+      Orientation	      left
+      NamePlacement	      alternate
+      Floating		      off
+      Location		      [340, 551, 668, 753]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "100"
+      YMin		      "-1"
+      YMax		      "1.1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "r_td"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [295, 380, 325, 400]
+      Orientation	      left
+      NamePlacement	      alternate
+      Floating		      off
+      Location		      [339, 778, 667, 988]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "100"
+      YMin		      "-1"
+      YMax		      "1.1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "t_drt"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [460, 362, 490, 378]
+      Floating		      off
+      Location		      [6, 777, 332, 987]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "100"
+      YMin		      "-5"
+      YMax		      "30"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "t_dt"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [420, 336, 450, 354]
+      Floating		      off
+      Location		      [6, 552, 332, 753]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      on
+      TimeRange		      "100"
+      YMin		      "-5"
+      YMax		      "11"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Line {
+      SrcBlock		      "Exemplary FDI Decision"
+      SrcPort		      2
+      Points		      [20, 0]
+      Branch {
+	DstBlock		"PID"
+	DstPort			1
+      }
+      Branch {
+	DstBlock		"PICalc"
+	DstPort			3
+      }
+    }
+    Line {
+      SrcBlock		      "PICalc"
+      SrcPort		      6
+      DstBlock		      "Mux1"
+      DstPort		      6
+    }
+    Line {
+      SrcBlock		      "PICalc"
+      SrcPort		      7
+      DstBlock		      "Mux1"
+      DstPort		      7
+    }
+    Line {
+      SrcBlock		      "PICalc"
+      SrcPort		      8
+      DstBlock		      "Mux1"
+      DstPort		      8
+    }
+    Line {
+      SrcBlock		      "PICalc"
+      SrcPort		      9
+      DstBlock		      "Mux1"
+      DstPort		      9
+    }
+    Line {
+      SrcBlock		      "PICalc"
+      SrcPort		      1
+      Points		      [30, 0]
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 245]
+	DstBlock		"t_dt"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "PICalc"
+      SrcPort		      2
+      Points		      [25, 0]
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			2
+      }
+      Branch {
+	Points			[0, 250]
+	DstBlock		"t_drt"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "PICalc"
+      SrcPort		      3
+      Points		      [5, 0]
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			3
+      }
+      Branch {
+	DstBlock		"r_fd"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "PICalc"
+      SrcPort		      4
+      Points		      [10, 0]
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			4
+      }
+      Branch {
+	Points			[0, 230]
+	DstBlock		"r_td"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "PICalc"
+      SrcPort		      5
+      Points		      [20, 0]
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			5
+      }
+      Branch {
+	Points			[0, 205]
+	DstBlock		"fs_d"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "PICalc"
+      SrcPort		      12
+      Points		      [15, 0]
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			12
+      }
+      Branch {
+	Points			[0, 85]
+	DstBlock		"dacc"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Fault Simulation"
+      SrcPort		      1
+      Points		      [25, 0]
+      Branch {
+	Points			[0, -20]
+	DstBlock		"fs"
+	DstPort			1
+      }
+      Branch {
+	DstBlock		"PICalc"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Exemplary FDI Decision"
+      SrcPort		      5
+      DstBlock		      "PICalc"
+      DstPort		      6
+    }
+    Line {
+      SrcBlock		      "Mux1"
+      SrcPort		      1
+      DstBlock		      "Display"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "PICalc"
+      SrcPort		      10
+      DstBlock		      "Mux1"
+      DstPort		      10
+    }
+    Line {
+      SrcBlock		      "PICalc"
+      SrcPort		      11
+      DstBlock		      "Mux1"
+      DstPort		      11
+    }
+    Line {
+      SrcBlock		      "Exemplary FDI Decision"
+      SrcPort		      3
+      Points		      [20, 0]
+      Branch {
+	DstBlock		"PICalc"
+	DstPort			4
+      }
+      Branch {
+	DstBlock		"CID"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Exemplary FDI Decision"
+      SrcPort		      4
+      Points		      [20, 0]
+      Branch {
+	DstBlock		"PICalc"
+	DstPort			5
+      }
+      Branch {
+	DstBlock		"FFID"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Exemplary FDI Decision"
+      SrcPort		      1
+      Points		      [20, 0]
+      Branch {
+	DstBlock		"PICalc"
+	DstPort			2
+      }
+      Branch {
+	Points			[0, -20]
+	DstBlock		"DD"
+	DstPort			1
+      }
+    }
+    Annotation {
+      Position		      [309, 52]
+      ForegroundColor	      red
+      Text		      "Application of 'PICalc' block for automatic per"
+"formance indexes generation"
+      FontName		      "Arial"
+      FontSize		      16
+      FontAngle		      italic
+    }
+    Annotation {
+      Position		      [249, 22]
+      ForegroundColor	      blue
+      Text		      "Example V - calculation of the performance inde"
+"xes"
+      FontName		      "Arial"
+      FontSize		      20
+      FontAngle		      italic
+    }
+    Annotation {
+      Position		      [244, 502]
+      ForegroundColor	      gray
+      Text		      "An example shows the application of Performance"
+" Index \nCalculator for evaluation of FDI decision. A set of  12 indexes is "
+"\ngenerated on line. Please note that -1 index value refers either to\nsituat"
+"ion when the index has none physical meaning or its\nvalue can not be determi"
+"ned. Before using this block please check \nand ev. set following block param"
+"eters: benchmark Step, Fault\n selection, failure mode. Start of benchmark pa"
+"rameters are active only\nin the case of choosing Other benchmark parameter. "
+"A grid of displays\nallows to follow the  time evolution of performance index"
+"es.  PICalc\nmust be supplied properly by the set of 6 input signals generate"
+"d from FDI\nsystem. The responsibility of creating the block interfacing PICa"
+"lc \n lies on the FDI evaluator. For further details please refer to appropri"
+"ate\nsection in Benchmark Definition description."
+      FontName		      "Arial"
+      FontAngle		      italic
+    }
+  }
+}

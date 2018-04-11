@@ -1,0 +1,1531 @@
+Model {
+  Name			  "SimpleProcess_ExampleIV"
+  Version		  2.20
+  SimParamPage		  Solver
+  SampleTimeColors	  off
+  InvariantConstants	  off
+  WideVectorLines	  off
+  ShowLineWidths	  off
+  StartTime		  "0.0"
+  StopTime		  "150"
+  Solver		  ode4
+  RelTol		  "1e-3"
+  AbsTol		  "1e-6"
+  Refine		  "1"
+  MaxStep		  "auto"
+  InitialStep		  "auto"
+  FixedStep		  "0.0025"
+  MaxOrder		  5
+  OutputOption		  RefineOutputTimes
+  OutputTimes		  "[]"
+  LoadExternalInput	  off
+  ExternalInput		  "[t, u]"
+  SaveTime		  on
+  TimeSaveName		  "tout"
+  SaveState		  off
+  StateSaveName		  "xout"
+  SaveOutput		  on
+  OutputSaveName	  "yout"
+  LoadInitialState	  off
+  InitialState		  "xInitial"
+  SaveFinalState	  off
+  FinalStateName	  "xFinal"
+  LimitMaxRows		  off
+  MaxRows		  "1000"
+  Decimation		  "1"
+  AlgebraicLoopMsg	  warning
+  MinStepSizeMsg	  warning
+  UnconnectedInputMsg	  warning
+  UnconnectedOutputMsg	  warning
+  UnconnectedLineMsg	  warning
+  ConsistencyChecking	  off
+  ZeroCross		  on
+  SimulationMode	  normal
+  RTWSystemTargetFile	  "grt.tlc"
+  RTWInlineParameters	  off
+  RTWPlaceOutputsASAP	  off
+  RTWRetainRTWFile	  off
+  RTWTemplateMakefile	  "grt_default_tmf"
+  RTWMakeCommand	  "make_rtw"
+  RTWGenerateCodeOnly	  off
+  ExtModeMexFile	  "ext_comm"
+  ExtModeBatchMode	  off
+  BlockDefaults {
+    Orientation		    right
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    NamePlacement	    normal
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    center
+    VerticalAlignment	    middle
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  System {
+    Name		    "SimpleProcess_ExampleIV"
+    Location		    [8, 77, 1271, 853]
+    Open		    on
+    ToolBar		    on
+    StatusBar		    on
+    ScreenColor		    white
+    PaperOrientation	    landscape
+    PaperPositionMode	    auto
+    PaperType		    usletter
+    PaperUnits		    inches
+    Block {
+      BlockType		      Constant
+      Name		      "Air supply pressure Pz [Pa]"
+      Position		      [40, 343, 85, 367]
+      ForegroundColor	      magenta
+      DropShadow	      on
+      NamePlacement	      alternate
+      Value		      "600000"
+    }
+    Block {
+      BlockType		      Display
+      Name		      "Control Error"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [1190, 146, 1245, 174]
+      FontName		      "Arial"
+      FontSize		      12
+      Format		      bank
+      Decimation	      "1"
+      Floating		      off
+      SampleTime	      "0.1"
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Controller"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [205, 174, 265, 216]
+      ShowPortLabels	      on
+      MaskType		      "Rozszerzony Regulator PID"
+      MaskDescription	      "CV=min ( LIMIT(2); max( LIMIT(1); (SP-PV)*(1+1/"
+"Is+Ds)*P ) )"
+      MaskPromptString	      "Proportional:|Limits:|Integration Limits:"
+      MaskStyleString	      "edit,edit,edit"
+      MaskTunableValueString  "on,on,on"
+      MaskVariables	      "P=@1;LIMIT=@2;ILIMIT=@3;"
+      MaskDisplay	      "disp('I')"
+      MaskIconFrame	      on
+      MaskIconOpaque	      off
+      MaskIconRotate	      port
+      MaskIconUnits	      autoscale
+      MaskValueString	      "100|[0 1]|[0 1]"
+      System {
+	Name			"Controller"
+	Location		[250, 437, 714, 619]
+	Open			off
+	ToolBar			on
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  Inport
+	  Name			  "PV"
+	  Position		  [30, 55, 60, 65]
+	  Port			  "1"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "SP"
+	  Position		  [30, 105, 60, 115]
+	  Port			  "2"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "Proportional Gain2"
+	  Position		  [235, 86, 270, 124]
+	  ShowName		  off
+	  Gain			  "P"
+	}
+	Block {
+	  BlockType		  Saturate
+	  Name			  "Saturation"
+	  Position		  [300, 95, 330, 115]
+	  ShowName		  off
+	  UpperLimit		  "LIMIT(2)"
+	  LowerLimit		  "LIMIT(1)"
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "Sum2"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [135, 95, 155, 115]
+	  ShowName		  off
+	  Inputs		  "+-"
+	}
+	Block {
+	  BlockType		  TransferFcn
+	  Name			  "Transfer Fcn"
+	  Position		  [175, 87, 215, 123]
+	  Numerator		  "[1]"
+	  Denominator		  "[0.5 1]"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "CV"
+	  Position		  [405, 100, 435, 110]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Line {
+	  SrcBlock		  "Saturation"
+	  SrcPort		  1
+	  DstBlock		  "CV"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Proportional Gain2"
+	  SrcPort		  1
+	  DstBlock		  "Saturation"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "PV"
+	  SrcPort		  1
+	  Points		  [30, 0; 0, 40]
+	  DstBlock		  "Sum2"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "SP"
+	  SrcPort		  1
+	  DstBlock		  "Sum2"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Sum2"
+	  SrcPort		  1
+	  DstBlock		  "Transfer Fcn"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Transfer Fcn"
+	  SrcPort		  1
+	  DstBlock		  "Proportional Gain2"
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      Terminator
+      Name		      "FDI Algorithms\nCV, P1', P2', T1'\nPz', CVI', P"
+"s', X', F'"
+      Position		      [1200, 655, 1220, 675]
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "FSel"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [235, 488, 310, 532]
+      SourceBlock	      "DABLib/FSel"
+      SourceType	      "Fault vector element attribution"
+      FSel		      "NO FAULT"
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "Fault Strength"
+      Position		      [165, 500, 185, 520]
+      Value		      "0"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Gain3"
+      Position		      [1140, 148, 1170, 172]
+      ShowName		      off
+      Gain		      "100"
+    }
+    Block {
+      BlockType		      Ground
+      Name		      "Ground"
+      Position		      [275, 204, 285, 216]
+      ShowName		      off
+    }
+    Block {
+      BlockType		      Ground
+      Name		      "Ground1"
+      Position		      [950, 384, 960, 396]
+      ShowName		      off
+    }
+    Block {
+      BlockType		      Ground
+      Name		      "Ground2"
+      Position		      [440, 619, 450, 631]
+      ShowName		      off
+    }
+    Block {
+      BlockType		      Ground
+      Name		      "Ground3"
+      Position		      [855, 509, 865, 521]
+      ShowName		      off
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Installation 1"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [80, 226, 115, 259]
+      NamePlacement	      alternate
+      ShowPortLabels	      on
+      System {
+	Name			"Installation 1"
+	Location		[282, 686, 577, 824]
+	Open			off
+	ToolBar			off
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  Inport
+	  Name			  "P0"
+	  Position		  [15, 22, 35, 38]
+	  Port			  "1"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "F"
+	  Position		  [45, 57, 65, 73]
+	  Port			  "2"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "k"
+	  Position		  [85, 47, 130, 83]
+	  DropShadow		  on
+	  NamePlacement		  alternate
+	  ShowName		  off
+	  Gain			  "1000"
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "sum"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [155, 17, 180, 68]
+	  NamePlacement		  alternate
+	  ShowName		  off
+	  Inputs		  "+-"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "P1"
+	  Position		  [235, 36, 255, 54]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Line {
+	  SrcBlock		  "P0"
+	  SrcPort		  1
+	  DstBlock		  "sum"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "sum"
+	  SrcPort		  1
+	  DstBlock		  "P1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "F"
+	  SrcPort		  1
+	  DstBlock		  "k"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "k"
+	  SrcPort		  1
+	  Points		  [5, 0]
+	  DstBlock		  "sum"
+	  DstPort		  2
+	}
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Installation 2"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [140, 266, 175, 299]
+      ShowPortLabels	      on
+      System {
+	Name			"Installation 2"
+	Location		[709, 570, 1061, 840]
+	Open			off
+	ToolBar			off
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  Inport
+	  Name			  "F"
+	  Position		  [105, 182, 125, 198]
+	  Port			  "1"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "h"
+	  Position		  [35, 147, 55, 163]
+	  Port			  "2"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	}
+	Block {
+	  BlockType		  Constant
+	  Name			  "Offset"
+	  Position		  [30, 96, 50, 114]
+	  Value			  "5"
+	}
+	Block {
+	  BlockType		  Constant
+	  Name			  "Steam preasure"
+	  Position		  [90, 43, 160, 67]
+	  Value			  "2200000"
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "k"
+	  Position		  [150, 172, 195, 208]
+	  DropShadow		  on
+	  NamePlacement		  alternate
+	  ShowName		  off
+	  Gain			  "100"
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "k1"
+	  Position		  [130, 127, 175, 163]
+	  DropShadow		  on
+	  NamePlacement		  alternate
+	  ShowName		  off
+	  Gain			  "10000"
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "sum"
+	  Ports			  [3, 1, 0, 0, 0]
+	  Position		  [225, 119, 250, 171]
+	  NamePlacement		  alternate
+	  ShowName		  off
+	  Inputs		  "3"
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "sum1"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [80, 117, 105, 168]
+	  NamePlacement		  alternate
+	  ShowName		  off
+	  Inputs		  "2"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "P2"
+	  Position		  [300, 136, 320, 154]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Line {
+	  SrcBlock		  "sum"
+	  SrcPort		  1
+	  DstBlock		  "P2"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "F"
+	  SrcPort		  1
+	  DstBlock		  "k"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "h"
+	  SrcPort		  1
+	  DstBlock		  "sum1"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "sum1"
+	  SrcPort		  1
+	  DstBlock		  "k1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Offset"
+	  SrcPort		  1
+	  Points		  [10, 0]
+	  DstBlock		  "sum1"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Steam preasure"
+	  SrcPort		  1
+	  Points		  [45, 0]
+	  DstBlock		  "sum"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "k1"
+	  SrcPort		  1
+	  DstBlock		  "sum"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "k"
+	  SrcPort		  1
+	  Points		  [0, -30]
+	  DstBlock		  "sum"
+	  DstPort		  3
+	}
+      }
+    }
+    Block {
+      BlockType		      Memory
+      Name		      "Memory"
+      Position		      [335, 80, 365, 110]
+      Orientation	      left
+      NamePlacement	      alternate
+      ShowName		      off
+      X0		      "0"
+      InheritSampleTime	      off
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux1"
+      Ports		      [5, 1, 0, 0, 0]
+      Position		      [1130, 305, 1140, 465]
+      BackgroundColor	      black
+      ShowName		      off
+      Inputs		      "5"
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux2"
+      Ports		      [9, 1, 0, 0, 0]
+      Position		      [1150, 593, 1160, 737]
+      BackgroundColor	      black
+      ShowName		      off
+      Inputs		      "9"
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Operator"
+      Ports		      [0, 1, 0, 0, 0]
+      Position		      [135, 190, 170, 220]
+      NamePlacement	      alternate
+      ShowPortLabels	      on
+      System {
+	Name			"Operator"
+	Location		[391, 443, 566, 546]
+	Open			off
+	ToolBar			off
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  Constant
+	  Name			  "const"
+	  Position		  [50, 41, 70, 59]
+	  Value			  "0.5"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "SP"
+	  Position		  [110, 41, 130, 59]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Line {
+	  SrcBlock		  "const"
+	  SrcPort		  1
+	  DstBlock		  "SP"
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "ProcAct"
+      Ports		      [6, 5, 0, 0, 0]
+      Position		      [440, 189, 595, 421]
+      DropShadow	      on
+      NamePlacement	      alternate
+      SourceBlock	      "DABLib/ProcessBlk/ProcAct"
+      SourceType	      "Process Actuator"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "ProcBV"
+      Ports		      [4, 1, 0, 0, 0]
+      Position		      [565, 479, 725, 601]
+      DropShadow	      on
+      NamePlacement	      alternate
+      SourceBlock	      "DABLib/ProcessBlk/ProcBV"
+      SourceType	      "Process By-pass Valve"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "ProcTran"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [305, 189, 345, 216]
+      DropShadow	      on
+      NamePlacement	      alternate
+      ShowName		      off
+      SourceBlock	      "DABLib/ProcessBlk/ProcTran"
+      SourceType	      "Process Transducer"
+      ScFact		      "1"
+      EN		      on
+      Sd		      "[435435431]"
+      FSel		      "NO FAULT"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "ProcTran1"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [990, 369, 1035, 396]
+      DropShadow	      on
+      NamePlacement	      alternate
+      ShowName		      off
+      SourceBlock	      "DABLib/ProcessBlk/ProcTran"
+      SourceType	      "Process Transducer"
+      ScFact		      "1"
+      EN		      on
+      Sd		      "[43543513]"
+      FSel		      "NO FAULT"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "ProcTran2"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [990, 433, 1035, 457]
+      DropShadow	      on
+      NamePlacement	      alternate
+      ShowName		      off
+      SourceBlock	      "DABLib/ProcessBlk/ProcTran"
+      SourceType	      "Process Transducer"
+      ScFact		      "40"
+      EN		      on
+      Sd		      "[324125]"
+      FSel		      "f19 - Flow rate sensor fault"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "ProcTran3"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [990, 403, 1035, 427]
+      DropShadow	      on
+      NamePlacement	      alternate
+      ShowName		      off
+      SourceBlock	      "DABLib/ProcessBlk/ProcTran"
+      SourceType	      "Process Transducer"
+      ScFact		      "2"
+      EN		      on
+      Sd		      "[568478435]"
+      FSel		      "NO FAULT"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "ProcTran4"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [475, 611, 525, 629]
+      DropShadow	      on
+      NamePlacement	      alternate
+      ShowName		      off
+      SourceBlock	      "DABLib/ProcessBlk/ProcTran"
+      SourceType	      "Process Transducer"
+      ScFact		      "1"
+      EN		      on
+      Sd		      "[123465]"
+      FSel		      "NO FAULT"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "ProcTran5"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [475, 645, 525, 665]
+      DropShadow	      on
+      NamePlacement	      alternate
+      ShowName		      off
+      SourceBlock	      "DABLib/ProcessBlk/ProcTran"
+      SourceType	      "Process Transducer"
+      ScFact		      "1"
+      EN		      on
+      Sd		      "[143534565]"
+      FSel		      "NO FAULT"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "ProcTran6"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [475, 676, 520, 694]
+      DropShadow	      on
+      NamePlacement	      alternate
+      ShowName		      off
+      SourceBlock	      "DABLib/ProcessBlk/ProcTran"
+      SourceType	      "Process Transducer"
+      ScFact		      "1"
+      EN		      on
+      Sd		      "[452543]"
+      FSel		      "NO FAULT"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "ProcTran7"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [895, 494, 950, 521]
+      DropShadow	      on
+      NamePlacement	      alternate
+      ShowName		      off
+      SourceBlock	      "DABLib/ProcessBlk/ProcTran"
+      SourceType	      "Process Transducer"
+      ScFact		      "1"
+      EN		      on
+      Sd		      "[65487986798]"
+      FSel		      "NO FAULT"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "ProcTran8"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [895, 539, 950, 566]
+      DropShadow	      on
+      NamePlacement	      alternate
+      ShowName		      off
+      SourceBlock	      "DABLib/ProcessBlk/ProcTran"
+      SourceType	      "Process Transducer"
+      ScFact		      "1"
+      EN		      on
+      Sd		      "[647658748]"
+      FSel		      "NO FAULT"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "ProcTran9"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [895, 579, 950, 606]
+      DropShadow	      on
+      NamePlacement	      alternate
+      ShowName		      off
+      SourceBlock	      "DABLib/ProcessBlk/ProcTran"
+      SourceType	      "Process Transducer"
+      ScFact		      "1"
+      EN		      on
+      Sd		      "[5465462]"
+      FSel		      "NO FAULT"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "Proc_f16"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [255, 347, 350, 383]
+      DropShadow	      on
+      SourceBlock	      "DABLib/ProcessBlk/Proc_f16"
+      SourceType	      "Fault"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "Proc_f18"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [435, 472, 530, 508]
+      DropShadow	      on
+      NamePlacement	      alternate
+      SourceBlock	      "DABLib/ProcessBlk/Proc_f18"
+      SourceType	      "Fault"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "Proc_f7"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [225, 307, 320, 343]
+      DropShadow	      on
+      NamePlacement	      alternate
+      SourceBlock	      "DABLib/ProcessBlk/Proc_f7"
+      SourceType	      "Fault"
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Pump1"
+      Ports		      [0, 1, 0, 0, 0]
+      Position		      [15, 225, 55, 245]
+      NamePlacement	      alternate
+      ShowPortLabels	      on
+      System {
+	Name			"Pump1"
+	Location		[391, 443, 561, 534]
+	Open			off
+	ToolBar			off
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  Constant
+	  Name			  "Pump pressure\n[Pa]\n"
+	  Position		  [35, 26, 90, 44]
+	  BackgroundColor	  yellow
+	  Value			  "3500000"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "P0"
+	  Position		  [125, 26, 145, 44]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Line {
+	  SrcBlock		  "Pump pressure\n[Pa]\n"
+	  SrcPort		  1
+	  DstBlock		  "P0"
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "SP, CV, X', F', PV' Plot"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [1185, 370, 1215, 400]
+      Floating		      off
+      Location		      [8, 628, 520, 962]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      xonly
+      TimeRange		      "150"
+      YMin		      "0               "
+      YMax		      "1               "
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Tank System"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [885, 210, 935, 250]
+      ShowPortLabels	      on
+      System {
+	Name			"Tank System"
+	Location		[30, 258, 609, 547]
+	Open			off
+	ToolBar			off
+	StatusBar		off
+	ScreenColor		white
+	PaperOrientation	landscape
+	PaperPositionMode	auto
+	PaperType		usletter
+	PaperUnits		inches
+	Block {
+	  BlockType		  Inport
+	  Name			  "F"
+	  Position		  [30, 57, 50, 73]
+	  Port			  "1"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	}
+	Block {
+	  BlockType		  Constant
+	  Name			  "Area"
+	  Position		  [260, 151, 300, 169]
+	  Value			  "20"
+	}
+	Block {
+	  BlockType		  Product
+	  Name			  "Fw"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [165, 173, 195, 197]
+	  Inputs		  "2"
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "Gain3"
+	  Position		  [30, 203, 60, 227]
+	  ShowName		  off
+	  Gain			  "2*9.81"
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "Gain4"
+	  Position		  [95, 53, 125, 77]
+	  ShowName		  off
+	  Gain			  "1/3600"
+	}
+	Block {
+	  BlockType		  Integrator
+	  Name			  "Integrator"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [420, 72, 455, 108]
+	  ShowName		  off
+	  ExternalReset		  none
+	  InitialConditionSource  internal
+	  InitialCondition	  "0.9"
+	  LimitOutput		  on
+	  UpperSaturationLimit	  "2"
+	  LowerSaturationLimit	  "0"
+	  ShowSaturationPort	  off
+	  ShowStatePort		  off
+	  AbsoluteTolerance	  "auto"
+	}
+	Block {
+	  BlockType		  Product
+	  Name			  "Quotient"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [350, 72, 390, 108]
+	  ShowName		  off
+	  Inputs		  "*/"
+	}
+	Block {
+	  BlockType		  MATLABFcn
+	  Name			  "Sqrt3"
+	  Position		  [75, 198, 135, 232]
+	  ShowName		  off
+	  MATLABFcn		  "sqrt"
+	  OutputWidth		  "-1"
+	}
+	Block {
+	  BlockType		  Constant
+	  Name			  "coef"
+	  Position		  [75, 146, 120, 164]
+	  Value			  "0.0013"
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "sum"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [255, 52, 280, 103]
+	  NamePlacement		  alternate
+	  ShowName		  off
+	  Inputs		  "+-"
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "PV"
+	  Position		  [530, 81, 550, 99]
+	  Port			  "1"
+	  OutputWhenDisabled	  held
+	  InitialOutput		  "0"
+	}
+	Line {
+	  SrcBlock		  "Gain3"
+	  SrcPort		  1
+	  DstBlock		  "Sqrt3"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Sqrt3"
+	  SrcPort		  1
+	  Points		  [10, 0]
+	  DstBlock		  "Fw"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "coef"
+	  SrcPort		  1
+	  Points		  [25, 0]
+	  DstBlock		  "Fw"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Quotient"
+	  SrcPort		  1
+	  DstBlock		  "Integrator"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "sum"
+	  SrcPort		  1
+	  DstBlock		  "Quotient"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Area"
+	  SrcPort		  1
+	  Points		  [5, 0; 0, -60]
+	  DstBlock		  "Quotient"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Integrator"
+	  SrcPort		  1
+	  Points		  [25, 0]
+	  Branch {
+	    DstBlock		    "PV"
+	    DstPort		    1
+	  }
+	  Branch {
+	    Points		    [0, 155; -470, 0]
+	    DstBlock		    "Gain3"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "F"
+	  SrcPort		  1
+	  DstBlock		  "Gain4"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Gain4"
+	  SrcPort		  1
+	  DstBlock		  "sum"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Fw"
+	  SrcPort		  1
+	  Points		  [20, 0; 0, -95]
+	  DstBlock		  "sum"
+	  DstPort		  2
+	}
+      }
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "Water temperature [C]"
+      Position		      [40, 306, 80, 324]
+      BackgroundColor	      yellow
+      NamePlacement	      alternate
+      Value		      "43"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "sum"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [1090, 132, 1115, 183]
+      NamePlacement	      alternate
+      ShowName		      off
+      Inputs		      "+-"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "sum1"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [780, 202, 805, 253]
+      NamePlacement	      alternate
+      ShowName		      off
+      Inputs		      "2"
+    }
+    Line {
+      SrcBlock		      "Fault Strength"
+      SrcPort		      1
+      DstBlock		      "FSel"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Pump1"
+      SrcPort		      1
+      DstBlock		      "Installation 1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Air supply pressure Pz [Pa]"
+      SrcPort		      1
+      DstBlock		      "Proc_f16"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Operator"
+      SrcPort		      1
+      Points		      [5, 0]
+      Branch {
+	DstBlock		"Controller"
+	DstPort			2
+      }
+      Branch {
+	Points			[0, -60; 835, 0]
+	Branch {
+	  DstBlock		  "sum"
+	  DstPort		  1
+	}
+	Branch {
+	  Points		  [0, 180]
+	  DstBlock		  "Mux1"
+	  DstPort		  1
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "Mux1"
+      SrcPort		      1
+      DstBlock		      "SP, CV, X', F', PV' Plot"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Ground"
+      SrcPort		      1
+      DstBlock		      "ProcTran"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Controller"
+      SrcPort		      1
+      Points		      [10, 0]
+      Branch {
+	Points			[0, -30; 785, 0; 0, 190]
+	Branch {
+	  DstBlock		  "Mux1"
+	  DstPort		  2
+	}
+	Branch {
+	  Points		  [0, 250]
+	  DstBlock		  "Mux2"
+	  DstPort		  1
+	}
+      }
+      Branch {
+	DstBlock		"ProcTran"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Mux2"
+      SrcPort		      1
+      DstBlock		      "FDI Algorithms\nCV, P1', P2', T1'\nPz', CVI', P"
+"s', X', F'"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Ground2"
+      SrcPort		      1
+      Points		      [0, 0]
+      Branch {
+	DstBlock		"ProcTran4"
+	DstPort			2
+      }
+      Branch {
+	Points			[0, 35]
+	Branch {
+	  DstBlock		  "ProcTran5"
+	  DstPort		  2
+	}
+	Branch {
+	  Points		  [0, 30]
+	  DstBlock		  "ProcTran6"
+	  DstPort		  2
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "Ground3"
+      SrcPort		      1
+      Points		      [5, 0]
+      Branch {
+	DstBlock		"ProcTran7"
+	DstPort			2
+      }
+      Branch {
+	Points			[0, 45]
+	Branch {
+	  Points		  [0, 40]
+	  DstBlock		  "ProcTran9"
+	  DstPort		  2
+	}
+	Branch {
+	  DstBlock		  "ProcTran8"
+	  DstPort		  2
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "Ground1"
+      SrcPort		      1
+      Points		      [5, 0]
+      Branch {
+	DstBlock		"ProcTran1"
+	DstPort			2
+      }
+      Branch {
+	Points			[0, 30]
+	DstBlock		"ProcTran3"
+	DstPort			2
+      }
+    }
+    Line {
+      SrcBlock		      "ProcTran7"
+      SrcPort		      1
+      Points		      [85, 0; 0, 155]
+      DstBlock		      "Mux2"
+      DstPort		      5
+    }
+    Line {
+      SrcBlock		      "ProcTran8"
+      SrcPort		      1
+      Points		      [60, 0; 0, 125]
+      DstBlock		      "Mux2"
+      DstPort		      6
+    }
+    Line {
+      SrcBlock		      "ProcTran9"
+      SrcPort		      1
+      Points		      [40, 0; 0, 100]
+      DstBlock		      "Mux2"
+      DstPort		      7
+    }
+    Line {
+      SrcBlock		      "ProcTran1"
+      SrcPort		      1
+      Points		      [50, 0]
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			3
+      }
+      Branch {
+	Points			[0, 325]
+	DstBlock		"Mux2"
+	DstPort			8
+      }
+    }
+    Line {
+      SrcBlock		      "sum"
+      SrcPort		      1
+      DstBlock		      "Gain3"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Gain3"
+      SrcPort		      1
+      DstBlock		      "Control Error"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "ProcTran4"
+      SrcPort		      1
+      DstBlock		      "Mux2"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "ProcTran5"
+      SrcPort		      1
+      Points		      [65, 0; 0, -20]
+      DstBlock		      "Mux2"
+      DstPort		      3
+    }
+    Line {
+      SrcBlock		      "ProcTran6"
+      SrcPort		      1
+      Points		      [80, 0; 0, -35]
+      DstBlock		      "Mux2"
+      DstPort		      4
+    }
+    Line {
+      SrcBlock		      "Installation 1"
+      SrcPort		      1
+      Points		      [290, 0]
+      Branch {
+	DstBlock		"ProcAct"
+	DstPort			2
+      }
+      Branch {
+	Points			[0, 280]
+	Branch {
+	  Points		  [0, 90]
+	  DstBlock		  "ProcTran4"
+	  DstPort		  1
+	}
+	Branch {
+	  DstBlock		  "ProcBV"
+	  DstPort		  2
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "ProcAct"
+      SrcPort		      5
+      Points		      [315, 0; 0, -20]
+      DstBlock		      "ProcTran1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "ProcAct"
+      SrcPort		      2
+      Points		      [260, 0; 0, 240]
+      DstBlock		      "ProcTran7"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "ProcAct"
+      SrcPort		      3
+      Points		      [250, 0; 0, 240]
+      DstBlock		      "ProcTran8"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "ProcAct"
+      SrcPort		      4
+      Points		      [240, 0; 0, 235]
+      DstBlock		      "ProcTran9"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "sum1"
+      SrcPort		      1
+      Points		      [60, 0]
+      Branch {
+	DstBlock		"Tank System"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 210]
+	DstBlock		"ProcTran2"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -135]
+	DstBlock		"Memory"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Proc_f18"
+      SrcPort		      1
+      DstBlock		      "ProcBV"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "ProcTran2"
+      SrcPort		      1
+      Points		      [60, 0]
+      Branch {
+	Points			[0, 280]
+	DstBlock		"Mux2"
+	DstPort			9
+      }
+      Branch {
+	Points			[0, -30]
+	DstBlock		"Mux1"
+	DstPort			4
+      }
+    }
+    Line {
+      SrcBlock		      "ProcTran3"
+      SrcPort		      1
+      Points		      [35, 0]
+      Branch {
+	Points			[0, 20; 40, 0]
+	DstBlock		"Mux1"
+	DstPort			5
+      }
+      Branch {
+	Points			[0, -245]
+	Branch {
+	  DstBlock		  "sum"
+	  DstPort		  2
+	}
+	Branch {
+	  Points		  [0, -45; -885, 0]
+	  DstBlock		  "Controller"
+	  DstPort		  1
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "ProcAct"
+      SrcPort		      1
+      DstBlock		      "sum1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "ProcBV"
+      SrcPort		      1
+      Points		      [35, 0]
+      DstBlock		      "sum1"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Proc_f16"
+      SrcPort		      1
+      DstBlock		      "ProcAct"
+      DstPort		      5
+    }
+    Line {
+      SrcBlock		      "Tank System"
+      SrcPort		      1
+      Points		      [0, 180]
+      Branch {
+	DstBlock		"ProcTran3"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 15; -825, 0; 0, -135]
+	DstBlock		"Installation 2"
+	DstPort			2
+      }
+    }
+    Line {
+      SrcBlock		      "Memory"
+      SrcPort		      1
+      Points		      [-320, 0; 0, 180; 55, 0]
+      Branch {
+	DstBlock		"Installation 2"
+	DstPort			1
+      }
+      Branch {
+	DstBlock		"Installation 1"
+	DstPort			2
+      }
+    }
+    Line {
+      SrcBlock		      "ProcTran"
+      SrcPort		      1
+      DstBlock		      "ProcAct"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Installation 2"
+      SrcPort		      1
+      Points		      [210, 0]
+      Branch {
+	DstBlock		"ProcAct"
+	DstPort			3
+      }
+      Branch {
+	Points			[0, 270]
+	Branch {
+	  Points		  [0, 95]
+	  DstBlock		  "ProcTran5"
+	  DstPort		  1
+	}
+	Branch {
+	  DstBlock		  "ProcBV"
+	  DstPort		  3
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "Water temperature [C]"
+      SrcPort		      1
+      DstBlock		      "Proc_f7"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Proc_f7"
+      SrcPort		      1
+      Points		      [50, 0]
+      Branch {
+	DstBlock		"ProcAct"
+	DstPort			4
+      }
+      Branch {
+	Points			[0, 260]
+	Branch {
+	  Points		  [0, 95]
+	  DstBlock		  "ProcTran6"
+	  DstPort		  1
+	}
+	Branch {
+	  DstBlock		  "ProcBV"
+	  DstPort		  4
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "FSel"
+      SrcPort		      1
+      Points		      [25, 0; 0, -20]
+      Branch {
+	DstBlock		"Proc_f18"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -40]
+	Branch {
+	  Points		  [0, -45]
+	  Branch {
+	    DstBlock		    "ProcAct"
+	    DstPort		    6
+	  }
+	  Branch {
+	    Points		    [-100, 0]
+	    Branch {
+	      DstBlock		      "Proc_f16"
+	      DstPort		      2
+	    }
+	    Branch {
+	      Points		      [-30, 0]
+	      DstBlock		      "Proc_f7"
+	      DstPort		      2
+	    }
+	  }
+	}
+	Branch {
+	  DstBlock		  "ProcTran2"
+	  DstPort		  2
+	}
+      }
+    }
+    Annotation {
+      Position		      [339, 62]
+      ForegroundColor	      red
+      Text		      "Application of 'Process Blocks' in process cont"
+"rol loop"
+      FontName		      "Arial"
+      FontSize		      16
+      FontAngle		      italic
+    }
+    Annotation {
+      Position		      [249, 22]
+      ForegroundColor	      blue
+      Text		      "Example IV - application of DABLib components"
+      FontName		      "Arial"
+      FontSize		      20
+      FontAngle		      italic
+    }
+    Annotation {
+      Position		      [924, 57]
+      ForegroundColor	      gray
+      Text		      "An example of simple control of water level in "
+"the tank is given.\nPlease note, that for connections with other installation"
+" devices physical outputs of 'ProcAct' block are used.\nMeasurement outputs a"
+"re used only for evaluation, data collection or diagnostic purposes."
+      FontName		      "Arial"
+      FontAngle		      italic
+    }
+  }
+}

@@ -1,0 +1,680 @@
+Model {
+  Name			  "ModelValidation_ExampleII"
+  Version		  2.20
+  SimParamPage		  Solver
+  SampleTimeColors	  off
+  InvariantConstants	  off
+  WideVectorLines	  on
+  ShowLineWidths	  off
+  StartTime		  "0.0"
+  StopTime		  "3600"
+  Solver		  ode4
+  RelTol		  "1e-3"
+  AbsTol		  "1e-6"
+  Refine		  "1"
+  MaxStep		  "auto"
+  InitialStep		  "auto"
+  FixedStep		  "0.0025"
+  MaxOrder		  5
+  OutputOption		  RefineOutputTimes
+  OutputTimes		  "[]"
+  LoadExternalInput	  off
+  ExternalInput		  "[t, u]"
+  SaveTime		  on
+  TimeSaveName		  "tout"
+  SaveState		  off
+  StateSaveName		  "xout"
+  SaveOutput		  on
+  OutputSaveName	  "yout"
+  LoadInitialState	  off
+  InitialState		  "xInitial"
+  SaveFinalState	  off
+  FinalStateName	  "xFinal"
+  LimitMaxRows		  off
+  MaxRows		  "1000"
+  Decimation		  "1"
+  AlgebraicLoopMsg	  warning
+  MinStepSizeMsg	  warning
+  UnconnectedInputMsg	  warning
+  UnconnectedOutputMsg	  warning
+  UnconnectedLineMsg	  warning
+  ConsistencyChecking	  off
+  ZeroCross		  on
+  SimulationMode	  normal
+  RTWSystemTargetFile	  "grt.tlc"
+  RTWInlineParameters	  off
+  RTWPlaceOutputsASAP	  off
+  RTWRetainRTWFile	  off
+  RTWTemplateMakefile	  "grt_default_tmf"
+  RTWMakeCommand	  "make_rtw"
+  RTWGenerateCodeOnly	  off
+  ExtModeMexFile	  "ext_comm"
+  ExtModeBatchMode	  off
+  BlockDefaults {
+    Orientation		    right
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    NamePlacement	    normal
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    center
+    VerticalAlignment	    middle
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  System {
+    Name		    "ModelValidation_ExampleII"
+    Location		    [58, 77, 1257, 580]
+    Open		    on
+    ToolBar		    on
+    StatusBar		    on
+    ScreenColor		    white
+    PaperOrientation	    landscape
+    PaperPositionMode	    auto
+    PaperType		    usletter
+    PaperUnits		    inches
+    Block {
+      BlockType		      Reference
+      Name		      "Act"
+      Ports		      [5, 6, 0, 0, 0]
+      Position		      [375, 127, 515, 328]
+      DropShadow	      on
+      NamePlacement	      alternate
+      SourceBlock	      "DABLib/Act"
+      SourceType	      "Actuator"
+      Dist		      off
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "CV, X', (P1'-P2'), F', Control Error\nPlot"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [850, 190, 880, 220]
+      Floating		      off
+      Location		      [19, 625, 439, 959]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      xonly
+      TimeRange		      "120"
+      YMin		      "-0.2"
+      YMax		      "1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      on
+      SampleTime	      "0.1"
+    }
+    Block {
+      BlockType		      Demux
+      Name		      "Demux"
+      Ports		      [1, 10, 0, 0, 0]
+      Position		      [110, 180, 115, 455]
+      BackgroundColor	      black
+      ShowName		      off
+      Outputs		      "10"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "F'm,F'r-F'm,F'r Plot"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [725, 345, 755, 375]
+      Floating		      off
+      Location		      [867, 623, 1275, 963]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      xonly
+      TimeRange		      "120"
+      YMin		      "-0.2"
+      YMax		      "1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      on
+      SampleTime	      "0.1"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "FGen"
+      Ports		      [0, 1, 0, 0, 0]
+      Position		      [200, 332, 235, 358]
+      ShowName		      off
+      SourceBlock	      "DABLib/FGen"
+      SourceType	      "Fault generator"
+      From		      "15"
+      To		      "inf"
+      MFS		      "0.1"
+      FDT		      "0"
+      FSD		      "1"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "FSel"
+      Ports		      [1, 1, 0, 0, 0]
+      Position		      [255, 324, 330, 366]
+      SourceBlock	      "DABLib/FSel"
+      SourceType	      "Fault vector element attribution"
+      FSel		      "NO FAULT"
+    }
+    Block {
+      BlockType		      FromFile
+      Name		      "From File"
+      Position		      [40, 85, 210, 135]
+      Orientation	      left
+      NamePlacement	      alternate
+      FileName		      "OneHourTestData_ExampleII.mat"
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux1"
+      Ports		      [5, 1, 0, 0, 0]
+      Position		      [760, 123, 770, 287]
+      BackgroundColor	      black
+      ShowName		      off
+      Inputs		      "5"
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux2"
+      Ports		      [3, 1, 0, 0, 0]
+      Position		      [665, 331, 675, 389]
+      BackgroundColor	      black
+      ShowName		      off
+      Inputs		      "3"
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux3"
+      Ports		      [3, 1, 0, 0, 0]
+      Position		      [665, 401, 675, 459]
+      BackgroundColor	      black
+      ShowName		      off
+      Inputs		      "3"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Scalling factor\n100%=1"
+      Position		      [275, 292, 315, 318]
+      ForegroundColor	      orange
+      DropShadow	      on
+      NamePlacement	      alternate
+      Gain		      "1/100"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Scalling factor\n100%=1 "
+      Position		      [380, 422, 425, 448]
+      ForegroundColor	      orange
+      DropShadow	      on
+      Gain		      "1/100"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Scalling factor\n1=1k"
+      Position		      [140, 192, 180, 218]
+      ForegroundColor	      orange
+      DropShadow	      on
+      NamePlacement	      alternate
+      Gain		      "1000"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Scalling factor\n1=1k1"
+      Position		      [210, 217, 250, 243]
+      ForegroundColor	      orange
+      DropShadow	      on
+      NamePlacement	      alternate
+      Gain		      "1000"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Scalling factor\n40[t/h]=1"
+      Position		      [380, 377, 420, 403]
+      ForegroundColor	      orange
+      DropShadow	      on
+      NamePlacement	      alternate
+      Gain		      "1/40"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum1"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [610, 414, 635, 441]
+      ShowName		      off
+      Inputs		      "-+"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum2"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [610, 344, 635, 371]
+      ShowName		      off
+      Inputs		      "-+"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum3"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [700, 249, 725, 276]
+      ShowName		      off
+      Inputs		      "+-"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum4"
+      Ports		      [2, 1, 0, 0, 0]
+      Position		      [565, 189, 580, 216]
+      ShowName		      off
+      Inputs		      "+-"
+    }
+    Block {
+      BlockType		      Terminator
+      Name		      "Terminator"
+      Position		      [135, 345, 155, 365]
+      ShowName		      off
+    }
+    Block {
+      BlockType		      Terminator
+      Name		      "Terminator1"
+      Position		      [135, 370, 155, 390]
+      ShowName		      off
+    }
+    Block {
+      BlockType		      Terminator
+      Name		      "Terminator2"
+      Position		      [135, 395, 155, 415]
+      ShowName		      off
+    }
+    Block {
+      BlockType		      Terminator
+      Name		      "Terminator3"
+      Position		      [135, 420, 155, 440]
+      ShowName		      off
+    }
+    Block {
+      BlockType		      Terminator
+      Name		      "Terminator4"
+      Position		      [545, 130, 565, 150]
+      ShowName		      off
+    }
+    Block {
+      BlockType		      Terminator
+      Name		      "Terminator5"
+      Position		      [545, 235, 565, 255]
+      ShowName		      off
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "X'm,X'r-X'm,X'r Plot"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [725, 415, 755, 445]
+      Floating		      off
+      Location		      [447, 625, 858, 965]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      yonly
+      TimeRange		      "120"
+      YMin		      "-0.2"
+      YMax		      "1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      off
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      on
+      SampleTime	      "0.1"
+    }
+    Line {
+      SrcBlock		      "FGen"
+      SrcPort		      1
+      DstBlock		      "FSel"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "FSel"
+      SrcPort		      1
+      Points		      [25, 0]
+      DstBlock		      "Act"
+      DstPort		      5
+    }
+    Line {
+      SrcBlock		      "Act"
+      SrcPort		      4
+      DstBlock		      "Terminator5"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Act"
+      SrcPort		      1
+      DstBlock		      "Terminator4"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "From File"
+      SrcPort		      1
+      Points		      [-25, 0; 0, 210]
+      DstBlock		      "Demux"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      10
+      DstBlock		      "Terminator3"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      9
+      DstBlock		      "Terminator2"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      8
+      DstBlock		      "Terminator1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      7
+      DstBlock		      "Terminator"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Mux1"
+      SrcPort		      1
+      DstBlock		      "CV, X', (P1'-P2'), F', Control Error\nPlot"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Sum4"
+      SrcPort		      1
+      DstBlock		      "Mux1"
+      DstPort		      3
+    }
+    Line {
+      SrcBlock		      "Sum3"
+      SrcPort		      1
+      DstBlock		      "Mux1"
+      DstPort		      5
+    }
+    Line {
+      SrcBlock		      "Act"
+      SrcPort		      2
+      Points		      [30, 0]
+      DstBlock		      "Sum4"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Act"
+      SrcPort		      3
+      DstBlock		      "Sum4"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Act"
+      SrcPort		      6
+      Points		      [55, 0]
+      Branch {
+	Points			[85, 0; 0, -80]
+	DstBlock		"Mux1"
+	DstPort			4
+      }
+      Branch {
+	Points			[0, 35; 10, 0]
+	Branch {
+	  DstBlock		  "Sum2"
+	  DstPort		  1
+	}
+	Branch {
+	  Points		  [0, -10]
+	  DstBlock		  "Mux2"
+	  DstPort		  1
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "Act"
+      SrcPort		      5
+      Points		      [25, 0]
+      Branch {
+	Points			[90, 0; 0, -10]
+	Branch {
+	  Points		  [0, -95]
+	  DstBlock		  "Mux1"
+	  DstPort		  2
+	}
+	Branch {
+	  DstBlock		  "Sum3"
+	  DstPort		  2
+	}
+      }
+      Branch {
+	Points			[0, 140; 45, 0]
+	Branch {
+	  DstBlock		  "Sum1"
+	  DstPort		  1
+	}
+	Branch {
+	  Points		  [0, -10]
+	  DstBlock		  "Mux3"
+	  DstPort		  1
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "Mux2"
+      SrcPort		      1
+      DstBlock		      "F'm,F'r-F'm,F'r Plot"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Sum2"
+      SrcPort		      1
+      DstBlock		      "Mux2"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Sum1"
+      SrcPort		      1
+      DstBlock		      "Mux3"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Mux3"
+      SrcPort		      1
+      DstBlock		      "X'm,X'r-X'm,X'r Plot"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Scalling factor\n100%=1"
+      SrcPort		      1
+      Points		      [15, 0; 0, -155]
+      Branch {
+	DstBlock		"Act"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -55; 300, 0; 0, 50; 40, 0]
+	Branch {
+	  DstBlock		  "Mux1"
+	  DstPort		  1
+	}
+	Branch {
+	  Points		  [0, 110]
+	  DstBlock		  "Sum3"
+	  DstPort		  1
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      5
+      DstBlock		      "Scalling factor\n100%=1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      4
+      Points		      [70, 0; 0, 110]
+      DstBlock		      "Scalling factor\n40[t/h]=1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      6
+      Points		      [60, 0; 0, 105]
+      DstBlock		      "Scalling factor\n100%=1 "
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      1
+      DstBlock		      "Scalling factor\n1=1k"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      2
+      DstBlock		      "Scalling factor\n1=1k1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Scalling factor\n1=1k"
+      SrcPort		      1
+      Points		      [165, 0; 0, -15]
+      DstBlock		      "Act"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Scalling factor\n1=1k1"
+      SrcPort		      1
+      DstBlock		      "Act"
+      DstPort		      3
+    }
+    Line {
+      SrcBlock		      "Scalling factor\n40[t/h]=1"
+      SrcPort		      1
+      Points		      [150, 0; 0, -25; 10, 0]
+      Branch {
+	DstBlock		"Sum2"
+	DstPort			2
+      }
+      Branch {
+	Points			[0, 15]
+	DstBlock		"Mux2"
+	DstPort			3
+      }
+    }
+    Line {
+      SrcBlock		      "Scalling factor\n100%=1 "
+      SrcPort		      1
+      Points		      [160, 0]
+      Branch {
+	DstBlock		"Sum1"
+	DstPort			2
+      }
+      Branch {
+	Points			[0, 15]
+	DstBlock		"Mux3"
+	DstPort			3
+      }
+    }
+    Line {
+      SrcBlock		      "Demux"
+      SrcPort		      3
+      Points		      [225, 0; 0, 15]
+      DstBlock		      "Act"
+      DstPort		      4
+    }
+    Annotation {
+      Position		      [404, 52]
+      ForegroundColor	      red
+      Text		      "Validation of actuator model using real process"
+" data"
+      FontName		      "Arial"
+      FontSize		      16
+      FontAngle		      italic
+    }
+    Annotation {
+      Position		      [244, 17]
+      ForegroundColor	      blue
+      Text		      "Example II - application of DABLib components"
+      FontName		      "Arial"
+      FontSize		      20
+      FontAngle		      italic
+    }
+    Annotation {
+      Position		      [84, 205]
+      Text		      "P74_00"
+    }
+    Annotation {
+      Position		      [83, 230]
+      Text		      "P74_01"
+    }
+    Annotation {
+      Position		      [82, 254]
+      Text		      "T74_00"
+    }
+    Annotation {
+      Position		      [83, 279]
+      Text		      "F74_00"
+    }
+    Annotation {
+      Position		      [72, 305]
+      Text		      "LC74_20CV"
+    }
+    Annotation {
+      Position		      [82, 331]
+      Text		      "L74_20X"
+    }
+    Annotation {
+      Position		      [74, 354]
+      Text		      "LC74_20PV"
+    }
+    Annotation {
+      Position		      [83, 384]
+      Text		      "F74_30"
+    }
+    Annotation {
+      Position		      [84, 405]
+      Text		      "P74_30"
+    }
+    Annotation {
+      Position		      [85, 430]
+      Text		      "T74_30"
+    }
+    Annotation {
+      Position		      [934, 67]
+      ForegroundColor	      gray
+      Text		      "The example of feeding the model with real proc"
+"ess data.\nThe data are read from exemplary MAT file containing one-hour Actu"
+"ator 3 data from 11.10.2001.\nAttention! The data from data files must be sca"
+"led to physical units acceptable by model."
+      FontName		      "Arial"
+      FontAngle		      italic
+    }
+  }
+}

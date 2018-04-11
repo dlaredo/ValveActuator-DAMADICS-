@@ -58,3 +58,6 @@ docs/_build/
 target/
 
 \.DS_Store
+
+DABLib/slprj/
+DABLib/c_code/slprj/

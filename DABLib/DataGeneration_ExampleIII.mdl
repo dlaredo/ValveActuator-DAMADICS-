@@ -1,0 +1,312 @@
+Model {
+  Name			  "DataGeneration_ExampleIII"
+  Version		  2.20
+  SimParamPage		  Solver
+  SampleTimeColors	  off
+  InvariantConstants	  off
+  WideVectorLines	  on
+  ShowLineWidths	  off
+  StartTime		  "0.0"
+  StopTime		  "85500"
+  Solver		  ode5
+  RelTol		  "1e-3"
+  AbsTol		  "1e-6"
+  Refine		  "1"
+  MaxStep		  "auto"
+  InitialStep		  "auto"
+  FixedStep		  "0.0025"
+  MaxOrder		  5
+  OutputOption		  RefineOutputTimes
+  OutputTimes		  "[]"
+  LoadExternalInput	  off
+  ExternalInput		  "[t, u]"
+  SaveTime		  on
+  TimeSaveName		  "tout"
+  SaveState		  off
+  StateSaveName		  "xout"
+  SaveOutput		  on
+  OutputSaveName	  "yout"
+  LoadInitialState	  off
+  InitialState		  "xInitial"
+  SaveFinalState	  off
+  FinalStateName	  "xFinal"
+  LimitMaxRows		  off
+  MaxRows		  "1000"
+  Decimation		  "1"
+  AlgebraicLoopMsg	  warning
+  MinStepSizeMsg	  warning
+  UnconnectedInputMsg	  warning
+  UnconnectedOutputMsg	  warning
+  UnconnectedLineMsg	  warning
+  ConsistencyChecking	  off
+  ZeroCross		  on
+  SimulationMode	  normal
+  RTWSystemTargetFile	  "grt.tlc"
+  RTWInlineParameters	  off
+  RTWPlaceOutputsASAP	  off
+  RTWRetainRTWFile	  off
+  RTWTemplateMakefile	  "grt_default_tmf"
+  RTWMakeCommand	  "make_rtw"
+  RTWGenerateCodeOnly	  off
+  ExtModeMexFile	  "ext_comm"
+  ExtModeBatchMode	  off
+  BlockDefaults {
+    Orientation		    right
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    NamePlacement	    normal
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    center
+    VerticalAlignment	    middle
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  System {
+    Name		    "DataGeneration_ExampleIII"
+    Location		    [579, 77, 1168, 547]
+    Open		    on
+    ToolBar		    on
+    StatusBar		    on
+    ScreenColor		    white
+    PaperOrientation	    landscape
+    PaperPositionMode	    auto
+    PaperType		    usletter
+    PaperUnits		    inches
+    Block {
+      BlockType		      Scope
+      Name		      "CV, P1', P2', X', F', T1', f Plot"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [345, 180, 375, 210]
+      Floating		      off
+      Location		      [612, 593, 1133, 937]
+      Open		      on
+      Grid		      on
+      TickLabels	      on
+      ZoomMode		      xonly
+      TimeRange		      "2100"
+      YMin		      "0"
+      YMax		      "1"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitMaxRows	      on
+      MaxRows		      "3600"
+      Decimation	      "1"
+      SampleInput	      on
+      SampleTime	      "1"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "DGen"
+      Ports		      [0, 7, 0, 0, 0]
+      Position		      [20, 122, 135, 268]
+      DropShadow	      on
+      NamePlacement	      alternate
+      ShowName		      off
+      SourceBlock	      "DABLib/DGen"
+      SourceType	      "Benchmark data generator"
+      FSel		      "f13 - Rod displacement sensor fault"
+      FType		      Incipient
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux1"
+      Ports		      [7, 1, 0, 0, 0]
+      Position		      [260, 119, 265, 271]
+      BackgroundColor	      black
+      ShowName		      off
+      Inputs		      "7"
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux2"
+      Ports		      [7, 1, 0, 0, 0]
+      Position		      [420, 266, 430, 354]
+      BackgroundColor	      black
+      ShowName		      off
+      Inputs		      "7"
+    }
+    Block {
+      BlockType		      ToFile
+      Name		      "To File"
+      Position		      [470, 355, 565, 385]
+      Filename		      "actuator_data.mat"
+      MatrixName	      "actuator_data"
+      Decimation	      "1"
+      SampleTime	      "1"
+    }
+    Block {
+      BlockType		      ToWorkspace
+      Name		      "To Workspace"
+      Position		      [475, 295, 535, 325]
+      VariableName	      "valve_data"
+      Buffer		      "inf"
+      Decimation	      "1"
+      SampleTime	      "1"
+    }
+    Line {
+      SrcBlock		      "Mux1"
+      SrcPort		      1
+      DstBlock		      "CV, P1', P2', X', F', T1', f Plot"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "DGen"
+      SrcPort		      7
+      Points		      [75, 0]
+      Branch {
+	Points			[0, 85]
+	DstBlock		"Mux2"
+	DstPort			7
+      }
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			7
+      }
+    }
+    Line {
+      SrcBlock		      "DGen"
+      SrcPort		      6
+      Points		      [65, 0]
+      Branch {
+	Points			[0, 95]
+	DstBlock		"Mux2"
+	DstPort			6
+      }
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			6
+      }
+    }
+    Line {
+      SrcBlock		      "DGen"
+      SrcPort		      5
+      Points		      [55, 0]
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			5
+      }
+      Branch {
+	Points			[0, 105]
+	DstBlock		"Mux2"
+	DstPort			5
+      }
+    }
+    Line {
+      SrcBlock		      "DGen"
+      SrcPort		      3
+      Points		      [35, 0]
+      Branch {
+	Points			[0, 125]
+	DstBlock		"Mux2"
+	DstPort			3
+      }
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			3
+      }
+    }
+    Line {
+      SrcBlock		      "DGen"
+      SrcPort		      2
+      Points		      [25, 0]
+      Branch {
+	Points			[0, 135]
+	DstBlock		"Mux2"
+	DstPort			2
+      }
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			2
+      }
+    }
+    Line {
+      SrcBlock		      "DGen"
+      SrcPort		      1
+      Points		      [15, 0]
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 145]
+	DstBlock		"Mux2"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "DGen"
+      SrcPort		      4
+      Points		      [45, 0]
+      Branch {
+	DstBlock		"Mux1"
+	DstPort			4
+      }
+      Branch {
+	Points			[0, 115]
+	DstBlock		"Mux2"
+	DstPort			4
+      }
+    }
+    Line {
+      SrcBlock		      "Mux2"
+      SrcPort		      1
+      Points		      [15, 0]
+      Branch {
+	DstBlock		"To Workspace"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 60]
+	DstBlock		"To File"
+	DstPort			1
+      }
+    }
+    Annotation {
+      Position		      [314, 57]
+      ForegroundColor	      red
+      Text		      "Data generation for benchmark purpose "
+      FontName		      "Arial"
+      FontSize		      16
+      FontAngle		      italic
+    }
+    Annotation {
+      Position		      [239, 17]
+      ForegroundColor	      blue
+      Text		      "Example III - application of DABLib components"
+      FontName		      "Arial"
+      FontSize		      20
+      FontAngle		      italic
+    }
+    Annotation {
+      Position		      [224, 412]
+      ForegroundColor	      gray
+      Text		      "The example of data generation with f13 incipie"
+"nt sensor fault simulation. \nIn 900th second a f13 strength starts to grow u"
+"p from 0. \nThe fault reaches full strength in 1800th second.\nOne can see ch"
+"ange in the relationship of X' and F'.\nDue to sensor fault, X' does not repr"
+"esent real X value.\nGenerated data, sampled every 1s are stored in the file "
+"and in the workspace.\nInstead of Scope block the on-line diagnosis system ca"
+"n be connected."
+      FontName		      "Arial"
+      FontAngle		      italic
+    }
+  }
+}

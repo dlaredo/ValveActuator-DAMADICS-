@@ -1,0 +1,1 @@
+To be able to use "DABLib" library in your Simulink/Matlab environment please add "DABLib" directory to your Matlab path.
