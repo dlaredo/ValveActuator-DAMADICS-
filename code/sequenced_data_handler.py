@@ -3,6 +3,10 @@ import math
 import sklearn
 
 
+# Changes made by Christian:
+
+# 11/26/2018: passed unroll to funtion generate_crossValidation_data
+
 class SequenceDataHandler():
 
 
@@ -56,9 +60,9 @@ class SequenceDataHandler():
 
 		#Different shapes for the arrays depending wether data is to be unrolled or not
 		if unroll == True:
-			self._X_train, self._y_train = np.empty([num_sequences, self._feature_size*self._sequence_length]), np.empty([num_sequences, 1])
+			self._X_train, self._y_train = np.empty([num_sequences, self._feature_size*self._sequence_length]), np.empty([num_sequences, self._y_train_list[0].shape[1]])
 		else:
-			self._X_train, self._y_train = np.empty([num_sequences, self._sequence_length, self._feature_size]), np.empty([num_sequences, 1])
+			self._X_train, self._y_train = np.empty([num_sequences, self._sequence_length, self._feature_size]), np.empty([num_sequences, self._y_train_list[0].shape[1]])
 
 		k = 0
 		#Create the feature matrix by moving the sequence window for each sample
@@ -85,9 +89,9 @@ class SequenceDataHandler():
 
 		#Different shapes for the arrays depending wether data is to be unrolled or not
 		if unroll == True:
-			self._X_test, self._y_test = np.empty([num_samples, self._feature_size*self._sequence_length]), np.empty([num_samples, 1])
+			self._X_test, self._y_test = np.empty([num_samples, self._feature_size*self._sequence_length]), np.empty([num_samples, self._y_train_list[0].shape[1]])
 		else:
-			self._X_test, self._y_test = np.empty([num_samples, self._sequence_length, self._feature_size]), np.empty([num_samples, 1])
+			self._X_test, self._y_test = np.empty([num_samples, self._sequence_length, self._feature_size]), np.empty([num_samples, self._y_train_list[0].shape[1]])
 
 		for i in range(num_samples):
 			sequence_samples = self._X_test_list[i][-self._sequence_length:,:]
@@ -101,7 +105,7 @@ class SequenceDataHandler():
 
 		#In case cross validation is enabled
 		if len(self._X_crossVal_list) != 0:
-			self.generate_crossValidation_data()
+			self.generate_crossValidation_data(unroll)
 
 
 	def generate_crossValidation_data(self, unroll=True):
@@ -114,9 +118,9 @@ class SequenceDataHandler():
 
 		#Different shapes for the arrays depending wether data is to be unrolled or not
 		if unroll == True:
-			self._X_crossVal, self._y_crossVal = np.empty([num_samples, self._feature_size*self._sequence_length]), np.empty([num_samples, 1])
+			self._X_crossVal, self._y_crossVal = np.empty([num_samples, self._feature_size*self._sequence_length]), np.empty([num_samples, self._y_train_list[0].shape[1]])
 		else:
-			self._X_crossVal, self._y_crossVal = np.empty([num_samples, self._sequence_length, self._feature_size]), np.empty([num_samples, 1])
+			self._X_crossVal, self._y_crossVal = np.empty([num_samples, self._sequence_length, self._feature_size]), np.empty([num_samples, self._y_train_list[0].shape[1]])
 
 		for i in range(num_samples):
 			sequence_samples = self._X_crossVal_list[i][-self._sequence_length:,:]

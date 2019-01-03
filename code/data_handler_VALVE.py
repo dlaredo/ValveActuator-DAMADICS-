@@ -56,11 +56,14 @@ class ValveDataHandler(SequenceDataHandler):
 		self._rectify_labels = False
 		self._sqlsession = None
 		self._num_samples = None
+		self._num_good = list()
+		self._num_bad = list()
 
-		if (problem == 'classification' or problem == 'regression'):
+        
+		if (problem == 'classification' or problem == 'regression' or problem == 'anomaly'):
 			self._problem = problem
 		else:
-			print("Error on 'problem' parameter. Must be either 'classification' or 'regression'.")
+			print("Error on 'problem' parameter. Must be either 'anomaly', 'classification' or 'regression'.")
 			return
 
 
@@ -151,26 +154,9 @@ class ValveDataHandler(SequenceDataHandler):
 		fault_column = list()
 		fault_column = self._y
 
-		if (self._problem == 'classification'):
-			one_hot_matrix = np.zeros((num_readings, 2))
-			for i in range(num_readings):
-				one_hot_matrix[i, int(fault_column[i])] = 1
-		else:
-			one_hot_matrix = np.zeros((num_readings, 20))
-			for i in range(num_readings):
-				one_hot_matrix[i, int(fault_column[i] - 1)] = 1
-
-		# one_hot_matrix = np.zeros((num_readings, 20))
-		# for i in range(num_readings):
-		# 	one_hot_matrix[i, int(fault_column[i] - 1)] = 1
-        
-# 		print("One-hot-encoding:", datetime.now() - startTime)
-# 		print()
-# 		print()
-# 		print("Shape of one_hot_matrix:", one_hot_matrix.shape)
-# 		print("One_hot_matrix:", one_hot_matrix[200:300])        
-# 		print()
-# 		print()
+		one_hot_matrix = np.zeros((num_readings, 20))
+		for i in range(num_readings):
+			one_hot_matrix[i, int(fault_column[i] - 1)] = 1
 
 		return one_hot_matrix
 
@@ -202,39 +188,61 @@ class ValveDataHandler(SequenceDataHandler):
 		small_list, big_list = list(), list()
 		# Flag
 		isBroken = False
-		counter = 0
+		num_valves = 0
 
-		if (self._problem == 'classification'):
+        
+		if (self._problem == 'anomaly'):
 			normal_status = 1.0
+		elif (self._problem == 'classification'):
+			normal_status = 0.0
 		else:
 			normal_status = 20.0
+            
+		num_good_readings = 0
+		num_bad_readings = 0
 
-		print(len(self._y))
+		self._num_good = list()
+		self._num_bad = list()
+
+
 		for i in range(len(self._y)):
-			# If True, then the current status of the valve is BROKEN
+			# Case: Previous reading states Valve is broken
 			if (isBroken):
-				# The valve has been fixed and is back to its normal status
+				# Find that the current reading indicates that the Valve is not broken, meaning this is a new valve 
 				if (self._y[i] == normal_status):
+					num_good_readings += 1
+					self._num_bad.append(num_bad_readings)
+					num_bad_readings = 0
+
 					isBroken = False
-					counter += 1
-					# Save everything from the small_list into the big_list
+					num_valves += 1
+
+					# Save completed valve reading
 					small_list = np.vstack(small_list)
 					big_list.append(small_list)
 					small_list = list()
-				#small_list.append(data_samples[i, :])
-				small_list.append(data_samples[i])
-			# The current status of the valve is NOT BROKEN
+				else:
+					num_bad_readings += 1
+					small_list.append(data_samples[i])
+				
+			# Case: Previous reading states Valve is broken
 			else:
+				# Find that the current reading indicates that the Valve is now broken        
 				if (self._y[i] != normal_status):
+					num_bad_readings += 1
+					self._num_good.append(num_good_readings)
+					num_good_readings = 0
+
 					isBroken = True
-				# small_list = np.append(data_samples[i, :], small_list)
-				#small_list.append(data_samples[i, :])
-				small_list.append(data_samples[i])
+				else:
+					num_good_readings += 1
+					small_list.append(data_samples[i])
+
 
 		print("Splitting into samples:",datetime.now() - startTime)
-		print("counter:", counter)
+		print("counter:", num_valves)
 
-		return big_list, counter
+		return big_list, num_valves
 
 
 	# Public
@@ -273,14 +281,17 @@ class ValveDataHandler(SequenceDataHandler):
 
 			# Data extraction begins
 			# self.extract_data_from_db()
-
-			# One hot encode output
-			output_one_hot_matrix = self.one_hot_encode(self._df.shape[0])
-
+            
 			# Finds valve samples in the dataset
 			self._X, self._num_samples = self.find_samples(self._X)
+
+			# One hot encode output (if necessary)
+# 			if (self._problem == 'regression' ):
+# 				output_one_hot_matrix = self.one_hot_encode(self._df.shape[0])
+# 				self._y, _ = self.find_samples(output_one_hot_matrix)
+# 			else:
+# 				self._y, _ = self.find_samples(self._y)
 			self._y, _ = self.find_samples(self._y)
-			#self._y, _ = self.find_samples(output_one_hot_matrix)
 
 		else:
 			print("Loading data from memory")
@@ -365,51 +376,52 @@ class ValveDataHandler(SequenceDataHandler):
 		random.shuffle(shuffled_samples)
 
 		num_crossVal = int(cross_validation_ratio * self._num_samples)
-		#print("num_crossVal:", num_crossVal)
 		num_test = int(test_ratio * self._num_samples)
-		#print("num_test:", num_test)
 		num_train = self._num_samples - num_crossVal - num_test
-		#print("num_train:", num_train)
 
 		X_train_list, y_train_list = list(), list()
 		X_crossVal_list, y_crossVal_list = list(), list()
 		X_test_list, y_test_list = list(), list()
+        
+		train_defect_counter = 0
+		crossVal_defect_counter = 0
+		test_defect_counter = 0
 
 		for i in range(num_train):
-			#print("i:", i)
 			X_train_list.append(self._X[shuffled_samples[i]])
 			y_train_list.append(self._y[shuffled_samples[i]])
-
+        
+		# TODO: combine for loop for cross-validation set and test set
 		for j in range(num_train, num_train + num_crossVal):
-			#print("j:", j)
             
 			random_index = np.random.randint(len(self._X[shuffled_samples[j]]) - self._sequence_length)
-# 			print("random_index:", random_index)                                      
-# 			print(len(self._X[shuffled_samples[j]][random_index]))
 			X_crossVal_list.append(self._X[shuffled_samples[j]][random_index:random_index + self._sequence_length])
             
-			#print(self._y[shuffled_samples[j]].shape)
-			if (self._problem == 'classification'):
-				y_crossVal_list.append(self._y[shuffled_samples[j]][random_index + self._sequence_length].reshape(1, 1))
-				#y_crossVal_list.append(self._y[shuffled_samples[j]].reshape(1, 2))
-			elif (self._problem == 'regression'):
+			if (self._problem == 'classification' or self._problem == 'anomaly'):
+				y_crossVal_list.append(self._y[shuffled_samples[j]][random_index + self._sequence_length])
+				if (y_crossVal_list[-1] == 1.0):
+					crossVal_defect_counter += 1
+			else:
 				y_crossVal_list.append(self._y[shuffled_samples[j]][random_index + self._sequence_length].reshape(1, 20))
-				#y_crossVal_list.append(self._y[shuffled_samples[j]][-1].reshape(1, 20))
-			#y_crossVal_list.append(self._y[shuffled_samples[j]][-1].reshape(1, 20))
-
+				if (y_crossVal_list[-1][-1][-1] == 1.0):
+					crossVal_defect_counter += 1
+                
 		for k in range(num_train + num_crossVal, self._num_samples):
-			#print("k:", k)
                                        
 			random_index = np.random.randint(len(self._X[shuffled_samples[k]]) - self._sequence_length)                    
 			X_test_list.append(self._X[shuffled_samples[k]][random_index:random_index + self._sequence_length])
                                        
-			if (self._problem == 'classification'):
-				y_test_list.append(self._y[shuffled_samples[k]][random_index + self._sequence_length].reshape(1, 1))
-				#y_test_list.append(self._y[shuffled_samples[k]][-1].reshape(1, 2))
-			elif (self._problem == 'regression'):
+			if (self._problem == 'classification' or self._problem == 'anomaly'):
+				y_test_list.append(self._y[shuffled_samples[k]][random_index + self._sequence_length])
+				if (y_test_list[-1] == 1.0):
+					test_defect_counter += 1
+			else:
 				y_test_list.append(self._y[shuffled_samples[k]][random_index + self._sequence_length].reshape(1, 20))
-				#y_test_list.append(self._y[shuffled_samples[k]][-1].reshape(1, 20))
-			#y_test_list.append(self._y[shuffled_samples[k]][-1].reshape(1, 20))
+				if (y_test_list[-1][-1][-1] == 1.0):
+					test_defect_counter += 1
+                
+		print('Number of defective valves in cross-validation set: {} out of {}.'.format(crossVal_defect_counter, len(y_crossVal_list)))
+		print('Number of defective valves in test set: {} out of {}.\n'.format(test_defect_counter, len(y_test_list)))        
 
 		return X_train_list, y_train_list, X_crossVal_list, y_crossVal_list, X_test_list, y_test_list
 

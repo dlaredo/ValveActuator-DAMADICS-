@@ -16,7 +16,6 @@ import CMAPSAuxFunctions
 # Modifications made by Christian:
 #
 # 10/21/2018: Added test_ratio parameter to load_data() function. Passess load_data to specified data handler.
-# 
 ###########################################################################
 
 class TunableModel():
@@ -77,7 +76,7 @@ class TunableModel():
 
 			if learningRate_scheduler != None:
 				training_callbacks.append(learningRate_scheduler)
-			#to visliaze tensorboard
+			#to visualize tensorboard
 			if tensorboard != None:
 				training_callbacks.append(tensorboard)
 				#tf.summary.FileWriter(logdir = "logs/viv_log")
@@ -85,7 +84,7 @@ class TunableModel():
 			if self._X_crossVal is not None:
 				print("training with cv")
 				val_data = (self._X_crossVal, self._y_crossVal)
-				self._model.fit(x = self._X_train, y = self._y_train, epochs = self._epochs, batch_size = self._batch_size, callbacks=training_callbacks, verbose=verbose, validation_data=val_data)
+				self._model.fit(x = self._X_train, y = self._y_train, epochs = self._epochs, batch_size = self._batch_size, callbacks=training_callbacks, verbose=verbose, validation_data=val_data, shuffle = True)
 			else:
 				print("training without cv")
 				self._model.fit(x = self._X_train, y = self._y_train, epochs = self._epochs, batch_size = self._batch_size, callbacks=training_callbacks, verbose=verbose)
@@ -125,6 +124,7 @@ class TunableModel():
 		#Predict the output labels
 		if self._lib_type == 'keras':
 			default_scores = self._model.evaluate(x = X_test, y = y_test)
+			print(default_scores)
 			self._y_predicted = self._model.predict(X_test)
 			self._scores["loss"] = default_scores[0]
 			default_scores.pop(0)
@@ -337,6 +337,9 @@ class SequenceTunableModelRegression(TunableModel):
 			if self._data_scaler != None:
 				X_train = self._data_scaler.fit_transform(X_train)
 				X_test = self._data_scaler.transform(X_test)
+				print("DATA SCALED TO PERFECTION")
+				print("DATA SCALED TO PERFECTION")
+				print("DATA SCALED TO PERFECTION")
 
 				if cross_validation_ratio > 0:
 					X_crossVal = self._data_scaler.transform(X_crossVal)
