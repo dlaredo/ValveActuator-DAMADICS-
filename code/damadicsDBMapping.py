@@ -6,7 +6,7 @@ Base = declarative_base()
 class ValveReading(Base):
 	"""Class to map to the DataPoints table in the HVAC DB"""
 
-	__tablename__ = 'valveReadings'
+	__tablename__ = 'valvereadings'
 
 	_id = Column('id', Integer, primary_key = True)
 	_timestamp = Column('timestamp', DateTime, unique=True)
