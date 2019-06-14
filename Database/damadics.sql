@@ -1,6 +1,6 @@
 CREATE SCHEMA `damadics` DEFAULT CHARACTER SET utf8;
 
-CREATE TABLE `damadics`.`valveReadings` (
+CREATE TABLE `damadics`.`valvereadings` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `timestamp` DATETIME NOT NULL,
   `externalControllerOutput` real NULL,
