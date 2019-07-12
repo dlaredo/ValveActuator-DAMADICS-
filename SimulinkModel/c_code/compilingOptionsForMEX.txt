@@ -1,5 +1,7 @@
 gcc -c utils.c
 
-ar -cvq libutils utils.o
+ar -cvq libutils.a utils.o
 
-mex saveToDB.c -I/usr/local/include/mysql -L/usr/local/lib/mysql -L. -lmysqlclient -lm -lutils
+mex randomFaultGenerator.c -L. -lutils
+
+mex saveToDB.c -I/usr/include/mysql -L. -L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lz -lm -lrt -latomic -ldl -lm -lutils
