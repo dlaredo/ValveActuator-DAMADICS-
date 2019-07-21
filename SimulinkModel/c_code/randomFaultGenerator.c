@@ -319,6 +319,10 @@ void randomFaultGenerator(double currentTime)
   {
     b = getBooleanFromRandom(muGen, stdGen, treshGen);
 
+    //Generate fault after 900 seconds
+    if(currentTime == 900)
+        b = 1;
+
     /*If no fault in process and generateRandomFault indicates that a
         fault should be generated*/
 
@@ -392,6 +396,10 @@ void getRandomFault(int *fsel, int *Ftype)
   rFtypeIndex = rand()%nFaultTypes;
 
   *Ftype = fmap[rFtypeIndex];
+
+  //Test with fault 1
+  *fsel = 1;
+  *Ftype = 1;
 }
 
 /*Set the parameters for the simulation of a specified fault. Taken from DGen mask init*/
@@ -401,7 +409,7 @@ void setSimulationParameters(int Fsel, int Ftype, double currentTime, double off
   double MFS = 0, FDT = 0;
   char msg[350];
 
-  if(Ftype == 4)//Abrupt fault
+  if(Ftype == 4)//Incipient fault
   {
     MFS = 1;
 
@@ -419,7 +427,7 @@ void setSimulationParameters(int Fsel, int Ftype, double currentTime, double off
       FDT = 0;
     }
   }
-  else
+  else //Abrupt fault
   {
     MFS = 0.25*Ftype;
     FDT = 0;

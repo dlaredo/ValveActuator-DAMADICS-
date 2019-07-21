@@ -27,7 +27,7 @@
 #include "utils.h"
 
 #define INPUT_PARAMS 1
-#define BULK_INSERT_SIZE 100
+#define BULK_INSERT_SIZE 10
 #define STRING_APPROX_SIZE 150
 
 int connect_to_DB(char *, char *, char *, char *);
@@ -65,7 +65,10 @@ int alreadySampled, bufferCounter;
 time_t startDateTime;
 FILE *startDateTimeFile, *logFile;
 unsigned long lastSampleTime;
-int stopFlag, connectionUp;
+int stopFlag, connectionUp, readFlag;
+
+unsigned long prevTime;
+int counter;
 
 
 /* Error handling
@@ -211,16 +214,23 @@ static void mdlOutputs(SimStruct *S, int_T tid)
     int sampleTime = 60, status = 0;
     unsigned long intTime = 0;
 
+    char strCounter[100];
+
     clockTime = signalVector[9];
 
     intTime = (unsigned long)floor(clockTime);
 
+    counter = counter + 1;
+
+
     if(stopFlag != 1) //Try to write to database only if the stop flag is not raised
     {
 
-      //Take only one sample per sample cycle (minimum sample rate is 1 second due to precision issues)
       if(intTime%sampleTime == 0 && lastSampleTime != intTime)
       {
+          //sprintf(strCounter, "intTime %lu lastSampleTime %lu lastSampleTime %lu read_flag %d\n", intTime, lastSampleTime, intTime, readFlag);
+          //logMsg(logFile, strCounter);
+
           lastSampleTime = intTime;
           updateSensorValues(signalVector);
           //writingStatus = writeToDB((time_t)intTime);
@@ -228,11 +238,15 @@ static void mdlOutputs(SimStruct *S, int_T tid)
 
           if(status != 0)
           {
-            logMsg(logFile, "Error ocurred while writing to the DB. Halting simulation.\n");
-            sendMail("Error ocurred while writing to the DB. Halting simulation.\n");
-            ssSetStopRequested(S, 1); //Stop simulation if writing to the DB is not possible
+              logMsg(logFile, "Error ocurred while writing to the DB. Halting simulation.\n");
+              sendMail("Error ocurred while writing to the DB. Halting simulation.\n");
+              ssSetStopRequested(S, 1); //Stop simulation if writing to the DB is not possible
           }
+
+          //counter = 0;
+
       }
+
     }
     else
       ssSetStopRequested(S, 1);
@@ -295,7 +309,11 @@ int initValues(SimStruct *S)
   int bytesRead = 0, connectionStatus = 0;
   char host[32]={}, user[128]={}, pass[128]={}, db[16]={}, paramString[512];
 
-  lastSampleTime = -1; //Initilize to -1 to take the sample at time 0
+  prevTime = 0;
+  counter = 0;
+  readFlag = 0;
+
+  lastSampleTime = 100000; //Initilize to big number to take the sample at time 0
   stopFlag = 0; //Set stop flag to 0
   sensorValues.controlValue = 0;
   sensorValues.pressureValveInlet = 0;
@@ -373,9 +391,6 @@ int connect_to_DB(char *host, char *user, char *pass, char *db)
       logMsg(logFile, msg);
       return -1;
   }
-  
-  //sprintf(msg, "Attempting connection to DB with Params: host:%s user:%s pass:%s db:%s", host, user, pass, db);
-  //logMsg(logFile, msg);
   
   if (mysql_real_connect(con, host, user, pass, db, 3306, NULL, 0) == NULL) 
   {
@@ -500,22 +515,21 @@ int addToBuffer(time_t elapsedSeconds)
 {
   time_t currentSimulationTime = startDateTime + elapsedSeconds;
 
-  if(bufferCounter < BULK_INSERT_SIZE)
+  if(bufferCounter >= BULK_INSERT_SIZE)
   {
-    databaseElement[bufferCounter].timestamp = currentSimulationTime;
-    databaseElement[bufferCounter].sensorValues = sensorValues;
-    bufferCounter += 1;
+      if(dbBulkInsert() == 0) //Attempt the bulk insert to mysql
+      {
+          cleanBuffer();
+          bufferCounter = 0;
+      }
+      else
+          return -1;
   }
-  else
-  {
-    if(dbBulkInsert() == 0) //Attempt the bulk insert to mysql
-    {
-      cleanBuffer();
-      bufferCounter = 0;
-    }
-    else
-      return -1;
-  }  
+
+  //Add current element to the buffer.
+  databaseElement[bufferCounter].timestamp = currentSimulationTime;
+  databaseElement[bufferCounter].sensorValues = sensorValues;
+  bufferCounter += 1;
 
   return 0;
 }

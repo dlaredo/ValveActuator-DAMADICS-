@@ -24,11 +24,19 @@
 #include <time.h>
 #include <math.h>
 #include <mysql.h>
+#include "utils.h"
 
-int connect_to_DB(void);
+#define INPUT_PARAMS 1
+#define BULK_INSERT_SIZE 10
+#define STRING_APPROX_SIZE 150
+
+int connect_to_DB(char *, char *, char *, char *);
 int writeToDB(time_t);
 void updateSensorValues(const real_T *);
-int initValues(void);
+int initValues(SimStruct *S);
+int addToBuffer(time_t);
+int dbBulkInsert(void);
+void cleanBuffer(void);
 
 typedef struct
 {
@@ -43,12 +51,24 @@ typedef struct
   int faultType;
 } damadicsSensorValues;
 
+//Ceate a buffer of elements to be inserted in the DB
+typedef struct
+{
+  time_t timestamp; 
+  damadicsSensorValues sensorValues;
+} databaseEntry;
+
 MYSQL *con;
 damadicsSensorValues sensorValues;
-int alreadySampled;
+databaseEntry databaseElement[BULK_INSERT_SIZE]; 
+int alreadySampled, bufferCounter;
 time_t startDateTime;
 FILE *startDateTimeFile, *logFile;
 unsigned long lastSampleTime;
+int stopFlag, connectionUp, readFlag;
+
+unsigned long prevTime;
+int counter;
 
 
 /* Error handling
@@ -85,7 +105,7 @@ unsigned long lastSampleTime;
  */
 static void mdlInitializeSizes(SimStruct *S)
 {
-    ssSetNumSFcnParams(S, 0);  /* Number of expected parameters */
+    ssSetNumSFcnParams(S, INPUT_PARAMS);  /* Number of expected parameters */
     if (ssGetNumSFcnParams(S) != ssGetSFcnParamsCount(S)) {
         /* Return if number of expected != number of actual parameters */
         return;
@@ -113,6 +133,8 @@ static void mdlInitializeSizes(SimStruct *S)
     ssSetNumPWork(S, 0);
     ssSetNumModes(S, 0);
     ssSetNumNonsampledZCs(S, 0);
+
+    ssSetSFcnParamTunable(S,0,false);
 
     /* Specify the sim state compliance to be same as a built-in block */
     ssSetSimStateCompliance(S, USE_DEFAULT_SIM_STATE);
@@ -153,11 +175,13 @@ static void mdlInitializeSampleTimes(SimStruct *S)
    */
   static void mdlInitializeConditions(SimStruct *S)
   {
-    if(initValues() != 0)
+    if(initValues(S) != 0)
     {
-      ssPrintf("Initialization error");
+      ssPrintf("Initialization error\n");
+      stopFlag = 1;
       ssSetStopRequested(S, 1);
     }
+    ssPrintf("Variables Initialized in saveToDB. Rest will be written to the log.\n");
   }
 #endif /* MDL_INITIALIZE_CONDITIONS */
 
@@ -187,26 +211,45 @@ static void mdlOutputs(SimStruct *S, int_T tid)
 {
     const real_T *signalVector = (const real_T*) ssGetInputPortSignal(S,0);
     double clockTime = 0;
-    int sampleTime = 60, writingStatus = 0;
+    int sampleTime = 60, status = 0;
     unsigned long intTime = 0;
+
+    char strCounter[100];
 
     clockTime = signalVector[9];
 
     intTime = (unsigned long)floor(clockTime);
 
-    //Take only one sample per sample cycle (minimum sample rate is 1 second due to precision issues)
-    if(intTime%sampleTime == 0 && lastSampleTime != intTime)
-    {
-        lastSampleTime = intTime;
-        updateSensorValues(signalVector);
-        writingStatus = writeToDB((time_t)intTime);
+    counter = counter + 1;
 
-        if(writingStatus != 0)
-        {
-          fprintf(logFile, "%s\n", "Error ocurred while writing to the DB. Halting simulation.\n");
-          ssSetStopRequested(S, 1); //Stop simulation if writing to the DB is not possible
-        }
+
+    if(stopFlag != 1) //Try to write to database only if the stop flag is not raised
+    {
+
+      if(intTime%sampleTime == 0 && lastSampleTime != intTime)
+      {
+          //sprintf(strCounter, "intTime %lu lastSampleTime %lu lastSampleTime %lu read_flag %d\n", intTime, lastSampleTime, intTime, readFlag);
+          //logMsg(logFile, strCounter);
+
+          lastSampleTime = intTime;
+          updateSensorValues(signalVector);
+          //writingStatus = writeToDB((time_t)intTime);
+          status = addToBuffer((time_t)intTime);
+
+          if(status != 0)
+          {
+              logMsg(logFile, "Error ocurred while writing to the DB. Halting simulation.\n");
+              sendMail("Error ocurred while writing to the DB. Halting simulation.\n");
+              ssSetStopRequested(S, 1); //Stop simulation if writing to the DB is not possible
+          }
+
+          //counter = 0;
+
+      }
+
     }
+    else
+      ssSetStopRequested(S, 1);
 }
 
 
@@ -249,7 +292,11 @@ static void mdlOutputs(SimStruct *S, int_T tid)
  */
 static void mdlTerminate(SimStruct *S)
 {
-  mysql_close(con);
+  if(connectionUp == 1)
+    mysql_close(con);
+  else
+    logMsg(logFile, "No DB connection");
+  
   fclose(startDateTimeFile);
   fclose(logFile);
 }
@@ -257,11 +304,17 @@ static void mdlTerminate(SimStruct *S)
 
 /*Function specific functions (implementation)*/
 
-int initValues(void)
+int initValues(SimStruct *S)
 {
   int bytesRead = 0, connectionStatus = 0;
+  char host[32]={}, user[128]={}, pass[128]={}, db[16]={}, paramString[512];
 
-  lastSampleTime = -1; //Initilize to -1 to take the sample at time 0
+  prevTime = 0;
+  counter = 0;
+  readFlag = 0;
+
+  lastSampleTime = 100000; //Initilize to big number to take the sample at time 0
+  stopFlag = 0; //Set stop flag to 0
   sensorValues.controlValue = 0;
   sensorValues.pressureValveInlet = 0;
   sensorValues.pressureValveOutlet = 0;
@@ -272,7 +325,27 @@ int initValues(void)
   sensorValues.selectedFault = 0;
   sensorValues.faultType = 0;
 
+  char msg[128];
+  connectionUp = 0;
+  bufferCounter = 0;
+
   logFile = fopen("DamadicsDatabaseLog.txt", "a");
+
+  if(logFile == NULL){
+    ssPrintf("Could not open log file for Database\n");
+    return -1;
+  }
+
+  //Read connection parameters for the database
+  if(mxGetString(ssGetSFcnParam(S, 0), paramString, mxGetN(ssGetSFcnParam(S, 0))*sizeof(mxChar) + 1) != 0){
+    logMsg(logFile, "Unable to read parameters for database connection\n");
+    return -1;
+  }
+
+  dbParamsFromString(paramString, host, user, pass, db);
+
+  //sprintf(msg, "DB Params:%s\n host:%s user:%s pass:%s db:%s", paramString, host, user, pass, db);
+  //logMsg(logFile, msg);
 
   if((startDateTimeFile = fopen("lastDateTime.txt", "r+")) != NULL)
   {
@@ -289,34 +362,41 @@ int initValues(void)
     startDateTime = time(NULL);
   }
 
-  connectionStatus = connect_to_DB();
+  connectionStatus = connect_to_DB(host, user, pass, db);
 
   if(connectionStatus == 0)
-      fprintf(logFile, "Succesfully connected to: %s\n", mysql_get_client_info());
-    else
-    {
-      fprintf(logFile, "Connection to the database failed\n");
-      return -1;
-    }
+  {
+    sprintf(msg, "Succesfully connected to: %s\n", (char *)mysql_get_client_info());
+    logMsg(logFile, msg);
+    connectionUp = 1;
+  }
+  else
+  {
+    logMsg(logFile, "Connection to the database failed\n");
+    return -1;
+  }
 
   return 0;
 }
 
-int connect_to_DB(void)
+int connect_to_DB(char *host, char *user, char *pass, char *db)
 {
 
   con = mysql_init(NULL);
+  char msg[350];
 
   if (con == NULL) 
   {
-      fprintf(logFile, "%s\n", mysql_error(con));
+      sprintf(msg, "%s\n", mysql_error(con));
+      logMsg(logFile, msg);
       return -1;
   }
-
-  if (mysql_real_connect(con, "localhost", "dlaredorazo", "@Dexsys13", "damadics", 3306, NULL, 0) == NULL) 
+  
+  if (mysql_real_connect(con, host, user, pass, db, 3306, NULL, 0) == NULL) 
   {
-      fprintf(logFile, "%s\n", mysql_error(con));
-      mysql_close(con);
+      sprintf(msg, "Unable to connect to DB\n%s\n", mysql_error(con));
+      logMsg(logFile, msg);
+      //mysql_close(con);
       return -1;
   }  
 
@@ -327,7 +407,7 @@ int connect_to_DB(void)
 int writeToDB(time_t elapsedSeconds)
 {
 
-  char queryString[500], dateTimeStr[100];
+  char queryString[500], dateTimeStr[100], msg[128];
   time_t currentSimulationTime = startDateTime + elapsedSeconds;
   struct tm simulationDateTime = *localtime(&currentSimulationTime);
 
@@ -340,21 +420,82 @@ int writeToDB(time_t elapsedSeconds)
     sensorValues.pressureValveInlet, sensorValues.pressureValveOutlet, sensorValues.mediumTemperature, sensorValues.rodDisplacement, 
     sensorValues.selectedFault, sensorValues.faultType, sensorValues.faultIntensity);
 
-  //fprintf(stdout, "%s\n", queryString);
-
   if (mysql_query(con, queryString))
-    {
-      fprintf(logFile, "%s\n", mysql_error(con));
-      return -1;
-    }
-    else
-    {
-      fprintf(logFile, "Writing to DB at: %s\n", dateTimeStr);
-      fseek(startDateTimeFile, 0, SEEK_SET);
-      fprintf(startDateTimeFile, "%li\n", currentSimulationTime+1);
-    }
+  {
+    sprintf(msg, "%s\n", mysql_error(con));
+    logMsg(logFile, msg);
+    return -1;
+  }
+  else
+  { //Need to improve the performance of this. Not to write the simulation time at each iteration
+    fseek(startDateTimeFile, 0, SEEK_SET);
+    fprintf(startDateTimeFile, "%li\n", currentSimulationTime+1);
+  }
 
     return 0;
+}
+
+int dbBulkInsert()
+{
+
+  int i = 0;
+  char insertString[256] = {}, dateTimeStr[24] = {}, msg[128] = {}; 
+  char valueBulkStr[BULK_INSERT_SIZE*STRING_APPROX_SIZE+256] = {}, valueStr[STRING_APPROX_SIZE] = {};
+  damadicsSensorValues sValues;
+  time_t elementTimestamp;
+  struct tm elementDateTime; 
+
+  FILE *fp = NULL;
+  fp = fopen("lastBulkInsertLog.txt", "w");
+
+  sprintf(insertString, "INSERT INTO valveReadings(timestamp, externalControllerOutput, disturbedMediumFlow,\
+    pressureValveInlet, pressureValveOutlet, mediumTemperature, rodDisplacement, selectedFault, faultType, faultIntensity)\
+    VALUES ");
+
+  strcpy(valueBulkStr, insertString);
+
+  for(i = 0; i < BULK_INSERT_SIZE; i++)
+  {
+    elementTimestamp = databaseElement[i].timestamp;
+    elementDateTime = *localtime(&elementTimestamp);
+    sValues = databaseElement[i].sensorValues;
+
+    sprintf(dateTimeStr, "%04d-%02d-%02d %02d:%02d:%02d", elementDateTime.tm_year + 1900, elementDateTime.tm_mon + 1, 
+    elementDateTime.tm_mday, elementDateTime.tm_hour, elementDateTime.tm_min, elementDateTime.tm_sec);
+
+
+    if(i != (BULK_INSERT_SIZE - 1))
+    {
+      sprintf(valueStr, "('%s', %.6f, %.6f, %.6f, %.6f, %.6f, %.6f, %d, %d, %.6f), ", dateTimeStr, sValues.controlValue, 
+      sValues.disturbedMediumFlow, sValues.pressureValveInlet, sValues.pressureValveOutlet, sValues.mediumTemperature, 
+      sValues.rodDisplacement, sValues.selectedFault, sValues.faultType, sValues.faultIntensity);
+    }
+    else //For the last element omit the comma at the end of the string
+    {
+      sprintf(valueStr, "('%s', %.6f, %.6f, %.6f, %.6f, %.6f, %.6f, %d, %d, %.6f)", dateTimeStr, sValues.controlValue, 
+      sValues.disturbedMediumFlow, sValues.pressureValveInlet, sValues.pressureValveOutlet, sValues.mediumTemperature, 
+      sValues.rodDisplacement, sValues.selectedFault, sValues.faultType, sValues.faultIntensity);
+    }
+
+    strcat(valueBulkStr, valueStr);
+  }
+
+  fprintf(fp, "%s\n", valueBulkStr);
+  fclose(fp);
+
+  if (mysql_query(con, valueBulkStr))
+  {
+    sprintf(msg, "%s\n", mysql_error(con));
+    logMsg(logFile, msg);
+    return -1;
+  }
+  else
+  {
+    fseek(startDateTimeFile, 0, SEEK_SET);
+    fprintf(startDateTimeFile, "%li\n", elementTimestamp+1);
+  }
+
+  return 0;
 }
 
 void updateSensorValues(const real_T *signalVector)
@@ -368,6 +509,48 @@ void updateSensorValues(const real_T *signalVector)
   sensorValues.faultIntensity = (double)signalVector[6];
   sensorValues.selectedFault = (int)signalVector[7];
   sensorValues.faultType = (int)signalVector[8];
+}
+
+int addToBuffer(time_t elapsedSeconds)
+{
+  time_t currentSimulationTime = startDateTime + elapsedSeconds;
+
+  if(bufferCounter >= BULK_INSERT_SIZE)
+  {
+      if(dbBulkInsert() == 0) //Attempt the bulk insert to mysql
+      {
+          cleanBuffer();
+          bufferCounter = 0;
+      }
+      else
+          return -1;
+  }
+
+  //Add current element to the buffer.
+  databaseElement[bufferCounter].timestamp = currentSimulationTime;
+  databaseElement[bufferCounter].sensorValues = sensorValues;
+  bufferCounter += 1;
+
+  return 0;
+}
+
+void cleanBuffer()
+{
+  int i = 0;
+
+  for(i = 0; i < BULK_INSERT_SIZE; i++)
+  {
+    databaseElement[i].timestamp = 0;
+    databaseElement[i].sensorValues.controlValue = 0;
+    databaseElement[i].sensorValues.pressureValveInlet = 0;
+    databaseElement[i].sensorValues.pressureValveOutlet = 0;
+    databaseElement[i].sensorValues.rodDisplacement = 0;
+    databaseElement[i].sensorValues.disturbedMediumFlow = 0;
+    databaseElement[i].sensorValues.mediumTemperature = 0;
+    databaseElement[i].sensorValues.faultIntensity = 0;
+    databaseElement[i].sensorValues.selectedFault = 0;
+    databaseElement[i].sensorValues.faultType = 0;
+  }
 }
 
 /*=============================*
